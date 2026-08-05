@@ -26,7 +26,7 @@ test("renders the finished counter picker", async () => {
   assert.match(html, /敌方阵容/);
   assert.match(html, /1–5 名敌方英雄/);
   assert.match(html, /你打哪条路/);
-  assert.match(html, /阵容最佳反制/);
+  assert.match(html, /暂无同路实测克制数据/);
   assert.match(html, /Mythic\+/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview|SkeletonPreview/);
 });
@@ -49,6 +49,8 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(page, /getMatchupEdge/);
   assert.doesNotMatch(page, /candidate\.wr|overallWinRateDiff/);
   assert.match(page, /Array\.from\(\{ length: 5 \}/);
+  assert.match(page, /useState<Hero\[\]>\(\[\]\)/);
+  assert.doesNotMatch(page, /HEROES\.find\(\(hero\) => hero\.name === "Hanabi"\)/);
   assert.doesNotMatch(page, /current\.length > 1/);
   assert.doesNotMatch(page, /熟练度/);
   assert.doesNotMatch(page, /最近选择|mlbb-picker-recents|recentNames/);

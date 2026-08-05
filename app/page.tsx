@@ -76,7 +76,7 @@ function HeroPortrait({ hero, size = "normal" }: { hero: Hero; size?: "small" | 
 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>("zh");
-  const [enemies, setEnemies] = useState<Hero[]>(() => [HEROES.find((hero) => hero.name === "Hanabi") ?? HEROES[0]]);
+  const [enemies, setEnemies] = useState<Hero[]>([]);
   const [lane, setLane] = useState<(typeof LANES)[number]["value"]>("Gold Lane");
   const [query, setQuery] = useState("");
   const [role, setRole] = useState("All");
