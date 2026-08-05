@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DATA_META, HEROES, type Hero } from "./data";
 import { COPY, ROLE_LABELS, SPEC_LABELS, type Locale } from "./i18n";
+import { getMatchupEdge } from "./matchups";
 
 const LANES = [
   { value: "Exp Lane", zh: "经验路", en: "EXP Lane", short: "EXP", icon: "⚔" },
@@ -12,38 +13,11 @@ const LANES = [
   { value: "Roam", zh: "游走", en: "Roam", short: "ROAM", icon: "◇" },
 ] as const;
 
-const DIRECT_COUNTERS: Record<string, Record<string, number>> = {
-  Miya: { Belerick: 3.2, Gatotkaca: 2.5, Thamuz: 1.7 },
-  Hanabi: { Lolita: 3.3, Beatrix: 3.2, Joy: 2.5 },
-  Eudora: { Barats: 2.8, Atlas: 2.8, Masha: 2.4 },
-  Lesley: { Sun: 3.5, Estes: 3.3, Gloo: 2.9 },
-  Vexana: { Alice: 2.6, Natalia: 2.1, Marcel: 2.1 },
-  Tigreal: { Alice: 4.0, Diggie: 3.7, "X.Borg": 2.7 },
-  Dyrroth: { Nana: 1.9, Johnson: 1.9, Argus: 1.7 },
-  Angela: { Lolita: 3.7, Franco: 2.6, Masha: 2.3 },
-  Zetian: { Valentina: 2.5, Harith: 2.0, Floryn: 2.0 },
-  "Yi Sun-shin": { Uranus: 2.4, Karina: 1.7, Aamon: 1.5 },
-  Gord: { Natalia: 3.1, Helcurt: 2.4, Ling: 2.0 },
-  Belerick: { Lesley: 3.2, "X.Borg": 2.9, Brody: 2.8 },
-  Nana: { Gloo: 2.5, Hylos: 2.1, Atlas: 2.0 },
-  Sun: { Natan: 4.8, Faramis: 4.2, Joy: 4.2 },
-  Gusion: { Lolita: 2.6, Roger: 1.8, Khufra: 1.7 },
-  Paquito: { Esmeralda: 3.4, Chip: 2.7, Khufra: 2.3 },
-  Granger: { Fanny: 3.2, Hilda: 2.9, Obsidia: 2.1 },
-  Guinevere: { Masha: 3.8, Diggie: 3.1, Wanwan: 3.0 },
-  Chou: { Phoveus: 2.3, Cyclops: 2.1, Esmeralda: 2.1 },
-  Layla: { Atlas: 3.7, Sun: 3.5, Johnson: 3.3 },
-  Cyclops: { Lolita: 9.6 },
-  Lolita: { Esmeralda: 5.8 },
-  Wanwan: { Phoveus: 5.2 },
-  Terizla: { "X.Borg": 4.8 },
-  Freya: { Phoveus: 4.7 },
-};
-
 type Recommendation = Hero & {
   score: number;
   displayScore: number;
   directEdges: { enemy: string; edge: number }[];
+  threats: { enemy: string; edge: number }[];
   coverage: number;
   reasons: string[];
 };
@@ -54,31 +28,30 @@ function normalize(value: string) {
 
 function scoreCandidate(candidate: Hero, enemies: Hero[], locale: Locale): Recommendation {
   const directEdges: { enemy: string; edge: number }[] = [];
-  const enemyAverageWr = enemies.reduce((sum, enemy) => sum + enemy.wr, 0) / enemies.length;
-  const overallWinRateDiff = candidate.wr - enemyAverageWr;
+  const threats: { enemy: string; edge: number }[] = [];
 
   for (const enemy of enemies) {
-    const directEdge = DIRECT_COUNTERS[enemy.name]?.[candidate.name];
-    if (directEdge) {
-      directEdges.push({ enemy: enemy.name, edge: directEdge });
-    }
+    const edge = getMatchupEdge(candidate.name, enemy.name);
+    if (edge > 0) directEdges.push({ enemy: enemy.name, edge });
+    if (edge < 0) threats.push({ enemy: enemy.name, edge: Math.abs(edge) });
   }
 
-  const totalMatchupEdge = directEdges.reduce((sum, item) => sum + item.edge, 0);
-  const score = 70 + overallWinRateDiff * 3 + totalMatchupEdge * 7;
-  const diffLabel = `${overallWinRateDiff >= 0 ? "+" : ""}${overallWinRateDiff.toFixed(2)}pp`;
+  const favorableEdge = directEdges.reduce((sum, item) => sum + item.edge, 0);
+  const unfavorableEdge = threats.reduce((sum, item) => sum + item.edge, 0);
+  const score = favorableEdge - unfavorableEdge;
   const t = COPY[locale];
   const reasons = [
-    t.rateReason(candidate.wr, diffLabel),
     ...directEdges.map((item) => t.edgeReason(item.enemy, item.edge)),
+    ...threats.map((item) => t.threatReason(item.enemy, item.edge)),
     ...(directEdges.length > 1 ? [t.coverageReason(directEdges.length, enemies.length)] : []),
   ];
 
   return {
     ...candidate,
     score,
-    displayScore: Math.max(55, Math.min(99, Math.round(score))),
+    displayScore: Number(score.toFixed(1)),
     directEdges,
+    threats,
     coverage: directEdges.length,
     reasons: [...new Set(reasons)].slice(0, 3),
   };
@@ -140,7 +113,7 @@ export default function Home() {
     setEnemies((current) => {
       const isSelected = current.some((item) => item.name === hero.name);
       const next = isSelected
-        ? (current.length > 1 ? current.filter((item) => item.name !== hero.name) : current)
+        ? current.filter((item) => item.name !== hero.name)
         : (current.length >= 5 ? [...current.slice(1), hero] : [...current, hero]);
       return next;
     });
@@ -159,7 +132,8 @@ export default function Home() {
   const recommendations = useMemo(
     () => HEROES.filter((hero) => !enemies.some((enemy) => enemy.name === hero.name) && hero.lane.includes(lane))
       .map((hero) => scoreCandidate(hero, enemies, locale))
-      .sort((a, b) => b.score - a.score),
+      .filter((hero) => hero.coverage > 0 && hero.score > 0)
+      .sort((a, b) => b.score - a.score || b.coverage - a.coverage),
     [enemies, lane, locale],
   );
 
@@ -169,6 +143,7 @@ export default function Home() {
   const shareResult = async () => {
     const laneLabel = locale === "zh" ? laneMeta.zh : laneMeta.en;
     const enemyNames = enemies.map((enemy) => enemy.name).join(locale === "zh" ? "、" : ", ");
+    if (!best) return;
     const text = t.share(DATA_META.patch, best.name, laneLabel, enemyNames, best.displayScore);
     try {
       await navigator.clipboard.writeText(text);
@@ -348,7 +323,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="best-card">
+          {best ? <div className="best-card">
             <div className="best-label">{t.bestCounter}</div>
             <div className="best-hero">
               <HeroPortrait hero={best} size="large" />
@@ -360,7 +335,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="score-ring">
-                <strong>{best.displayScore}</strong>
+                <strong>+{best.displayScore.toFixed(1)}</strong>
                 <small>{t.score}</small>
               </div>
             </div>
@@ -372,11 +347,11 @@ export default function Home() {
             </ul>
 
             <div className="stat-row">
-              <div><span>{t.mythicWinRate}</span><b>{best.wr.toFixed(2)}%</b></div>
-              <div><span>{t.pickRate}</span><b>{best.pr.toFixed(2)}%</b></div>
-              <div><span>{t.banRate}</span><b>{best.br.toFixed(2)}%</b></div>
+              <div><span>{t.netEdge}</span><b>+{best.displayScore.toFixed(1)}pp</b></div>
+              <div><span>{t.counterCoverage}</span><b>{best.coverage}/{enemies.length}</b></div>
+              <div><span>{t.reverseThreats}</span><b>{best.threats.length}</b></div>
             </div>
-          </div>
+          </div> : <div className="best-card no-data"><h2 id="result-heading">{t.noCounterTitle}</h2><p>{t.noCounterHelp}</p></div>}
 
           <div className="alternatives-heading">
             <h3>{t.alternatives}</h3>
@@ -390,14 +365,14 @@ export default function Home() {
                 <HeroPortrait hero={hero} size="small" />
                 <div>
                   <b>{hero.name}</b>
-                  <small>{hero.directEdges.length ? t.measuredMatchups(hero.directEdges.length, hero.wr) : t.mythicRateValue(hero.wr)}</small>
+                  <small>{t.matchupSummary(hero.directEdges.length, hero.displayScore)}</small>
                 </div>
                 <strong>{hero.displayScore}</strong>
               </div>
             ))}
           </div>
 
-          <button className="copy-button" type="button" onClick={shareResult}>
+          <button className="copy-button" type="button" onClick={shareResult} disabled={!best}>
             <span>{copied ? "✓" : "＋"}</span>
             {copied ? t.copied : t.copy}
           </button>

@@ -8,7 +8,7 @@
 
 - Select 1–5 enemy heroes / 选择 1–5 名敌方英雄
 - Filter recommendations by EXP, Gold, Mid, Jungle or Roam / 按五个分路筛选
-- Rank picks by Mythic+ win-rate gap and measured matchup edge / 按神话+胜率差与实测对位优势排序
+- Rank picks only by measured Mythic+ counter relationships; global win rate is ignored / 只按神话+实测克制关系排序，不考虑全局胜率
 - Automatically follows the browser language, with a manual 中文/EN switch / 根据浏览器语言自动选择中英文，也可手动切换
 - Responsive desktop and mobile layouts / 同时适配桌面和手机
 - No account, backend or user-tracking features / 无需账户、后端或用户追踪

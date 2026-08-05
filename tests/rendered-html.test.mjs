@@ -44,13 +44,16 @@ test("ships complete local hero data and social preview", async () => {
   for (const lane of ["Exp Lane", "Gold Lane", "Mid Lane", "Jungle", "Roam"]) {
     assert.match(page, new RegExp(lane));
   }
-  assert.match(page, /DIRECT_COUNTERS/);
+  assert.match(page, /getMatchupEdge/);
+  assert.doesNotMatch(page, /candidate\.wr|overallWinRateDiff/);
   assert.match(page, /Array\.from\(\{ length: 5 \}/);
+  assert.doesNotMatch(page, /current\.length > 1/);
   assert.doesNotMatch(page, /熟练度/);
   assert.doesNotMatch(page, /最近选择|mlbb-picker-recents|recentNames/);
   assert.match(page, /navigator\.language/);
   assert.match(i18n, /Who did the enemy pick\?/);
   assert.match(i18n, /敌方选了谁？/);
+  assert.match(i18n, /只按实测克制关系排序，不参考全局胜率/);
   assert.match(staticHtml, /Counter Ready/);
   await access(new URL("../public/og.png", import.meta.url));
   assert.deepEqual(await readdir(new URL("../app/_sites-preview", import.meta.url)), []);
