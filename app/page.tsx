@@ -13,6 +13,10 @@ const LANES = [
   { value: "Roam", zh: "游走", en: "Roam", short: "ROAM", icon: "◇" },
 ] as const;
 
+const SHOWCASE_HEROES = ["Miya", "Alucard", "Layla"]
+  .map((name) => HEROES.find((hero) => hero.name === name))
+  .filter((hero): hero is Hero => Boolean(hero));
+
 type Recommendation = Hero & {
   score: number;
   displayScore: number;
@@ -158,10 +162,10 @@ export default function Home() {
     <main>
       <header className="topbar">
         <a className="brand" href="#top" aria-label={t.homeLabel}>
-          <span className="brand-mark">CR</span>
+          <span className="brand-mark">ML</span>
           <span>
-            <strong>COUNTER READY</strong>
-            <small>{t.brandSubtitle}</small>
+            <strong>MOBILE LEGENDS</strong>
+            <small>BANG BANG · {t.brandSubtitle}</small>
           </span>
         </a>
         <div className="top-actions">
@@ -179,12 +183,31 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="intro" id="top">
-        <div>
-          <span className="eyebrow">DRAFT PHASE TOOL</span>
-          <h1>{t.introLead}<em>{t.introAccent}</em></h1>
+      <section className="game-hero" id="top">
+        <div className="hero-copy">
+          <div className="game-overline">
+            <span className="game-chip">MLBB</span>
+            <span>{t.unofficial}</span>
+          </div>
+          <h1 className="game-name">Mobile Legends <span>Bang Bang</span></h1>
+          <h2 className="hero-promise">{t.introLead}<em>{t.introAccent}</em></h2>
+          <p>{t.introDescription}</p>
+          <div className="hero-facts">
+            <span><b>MYTHIC+</b>{t.matchupOnly}</span>
+            <span><b>1–5</b>{t.enemyFact}</span>
+            <span><b>{DATA_META.patch}</b>{t.patchFact}</span>
+          </div>
         </div>
-        <p>{t.introDescription}</p>
+        <div className="hero-roster" aria-hidden="true">
+          <div className="roster-glow" />
+          {SHOWCASE_HEROES.map((hero, index) => (
+            <div className={`showcase-hero showcase-${index + 1}`} key={hero.id}>
+              <HeroPortrait hero={hero} size="large" />
+              <span>{hero.name}</span>
+            </div>
+          ))}
+          <div className="counter-stamp"><small>MLBB</small><b>COUNTER<br />READY</b></div>
+        </div>
       </section>
 
       <div className="workspace">

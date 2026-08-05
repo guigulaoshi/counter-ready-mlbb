@@ -17,8 +17,10 @@ test("renders the finished counter picker", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /<title>Counter Ready/);
-  assert.match(html, /MLBB 极速反制助手/);
+  assert.match(html, /<title>Mobile Legends Counter Picker/);
+  assert.match(html, /Mobile Legends/);
+  assert.match(html, /Bang Bang/);
+  assert.match(html, /非官方 · 神话\+选人助手/);
   assert.match(html, /PATCH[\s\S]{0,30}2\.1\.90/);
   assert.match(html, /敌方选了谁/);
   assert.match(html, /敌方阵容/);
@@ -55,6 +57,6 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(i18n, /敌方选了谁？/);
   assert.match(i18n, /只按实测克制关系排序，不参考全局胜率/);
   assert.match(staticHtml, /Counter Ready/);
-  await access(new URL("../public/og.png", import.meta.url));
+  await access(new URL("../public/og-v2.png", import.meta.url));
   assert.deepEqual(await readdir(new URL("../app/_sites-preview", import.meta.url)), []);
 });
