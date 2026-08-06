@@ -16,14 +16,14 @@
 ## Data / 数据
 
 - Patch 2.1.90 · Season 41
-- Snapshot / 快照：2026-08-04
+- Snapshot / 快照：2026-08-06
 - 133 heroes / 133 位英雄
 - Win, pick and ban rates are the 7-day average across Mythic, Mythical Honor and Mythical Glory+ / 胜率、选取率、禁用率为神话、神话荣耀、神话荣光+近 7 日平均值
-- Matchup edges reference current-patch MLBBHub data / 对位优势参考 MLBBHub 当前版本数据
+- Matchup edges use the Mythic rank tier from mlbb.tools and are stored locally / 对位优势使用 mlbb.tools 的神话段位数据并保存在本地
 
-This is a static snapshot and does not update automatically. Update `app/data.ts` and the displayed patch metadata after a game patch.
+This is a static snapshot and does not update automatically. Run `npm run data:update-matchups` and update the displayed patch metadata after a game patch.
 
-这是静态快照，不会自动更新。游戏换版本后，需要同步更新 `app/data.ts` 和页面版本信息。
+这是静态快照，不会自动更新。游戏换版本后，运行 `npm run data:update-matchups`，并同步更新页面版本信息。
 
 ## Local development / 本地运行
 

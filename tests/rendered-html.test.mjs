@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile, readdir } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render() {
@@ -38,9 +38,9 @@ test("ships complete local hero data and social preview", async () => {
     readFile(new URL("../app/i18n.ts", import.meta.url), "utf8"),
     readFile(new URL("../pages-dist/index.html", import.meta.url), "utf8"),
   ]);
-  assert.equal((data.match(/\"id\":/g) ?? []).length, 133);
+  assert.equal((data.match(/"id":/g) ?? []).length, 133);
   assert.match(data, /patch: "2\.1\.90"/);
-  assert.match(data, /snapshot: "2026-08-04"/);
+  assert.match(data, /snapshot: "2026-08-06"/);
   assert.match(data, /rank: "Mythic\+"/);
   assert.match(data, /timeframe: "近 7 日"/);
   for (const lane of ["Exp Lane", "Gold Lane", "Mid Lane", "Jungle", "Roam"]) {
@@ -60,5 +60,5 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(i18n, /只按实测克制关系排序，不参考全局胜率/);
   assert.match(staticHtml, /Counter Ready/);
   await access(new URL("../public/og-v2.png", import.meta.url));
-  assert.deepEqual(await readdir(new URL("../app/_sites-preview", import.meta.url)), []);
+  await assert.rejects(access(new URL("../app/_sites-preview", import.meta.url)));
 });

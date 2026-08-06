@@ -13,11 +13,11 @@ export type Hero = {
 export const DATA_META = {
   patch: "2.1.90",
   season: "S41",
-  snapshot: "2026-08-04",
+  snapshot: "2026-08-06",
   rank: "Mythic+",
   rankLabel: "神话及以上",
   timeframe: "近 7 日",
-  source: "MLBB.io / Moonton ranked statistics",
+  source: "mlbb.tools / MLBB.io / Moonton ranked statistics",
 } as const;
 
 export const HEROES: Hero[] = [
@@ -2480,4 +2480,3 @@ export const HEROES: Hero[] = [
     "br": 0.36
   }
 ];
-

@@ -91,7 +91,7 @@ export default function Home() {
     const savedLocale = localStorage.getItem("counter-ready-locale") as Locale | null;
     const browserLocale: Locale = navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en";
     const nextLocale = savedLocale === "zh" || savedLocale === "en" ? savedLocale : browserLocale;
-    setLocale(nextLocale);
+    const localeTimer = window.setTimeout(() => setLocale(nextLocale), 0);
     document.documentElement.lang = nextLocale === "zh" ? "zh-CN" : "en";
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "/" && document.activeElement?.tagName !== "INPUT") {
@@ -104,7 +104,10 @@ export default function Home() {
       }
     };
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    return () => {
+      window.clearTimeout(localeTimer);
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, []);
 
   const changeLocale = (nextLocale: Locale) => {
