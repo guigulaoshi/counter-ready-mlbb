@@ -385,9 +385,9 @@ export default function Home() {
           </div>
 
           <div className="alternatives">
-            {recommendations.slice(1, 5).map((hero, index) => (
+            {recommendations.slice(1, 10).map((hero, index) => (
               <div className="alternative-card" key={hero.id}>
-                <span className="rank">0{index + 2}</span>
+                <span className="rank">{String(index + 2).padStart(2, "0")}</span>
                 <HeroPortrait hero={hero} size="small" />
                 <div>
                   <b>{hero.name}</b>
