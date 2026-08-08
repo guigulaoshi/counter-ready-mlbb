@@ -77,10 +77,9 @@ function HeroPortrait({ hero, size = "normal" }: { hero: Hero; size?: "small" | 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>("zh");
   const [enemies, setEnemies] = useState<Hero[]>([]);
-  const [lane, setLane] = useState<(typeof LANES)[number]["value"]>("Gold Lane");
+  const [lane, setLane] = useState<(typeof LANES)[number]["value"]>("Exp Lane");
   const [query, setQuery] = useState("");
   const [role, setRole] = useState("All");
-  const [showAll, setShowAll] = useState(false);
   const [copied, setCopied] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
   const t = COPY[locale];
@@ -133,8 +132,6 @@ export default function Home() {
       .filter((hero) => !cleanQuery || normalize(hero.name).includes(cleanQuery) || hero.name.split(/\s|-/).map((part) => part[0]).join("").toLowerCase().includes(cleanQuery))
       .sort((a, b) => b.pr - a.pr);
   }, [query, role]);
-
-  const visibleHeroes = query || showAll ? heroList : heroList.slice(0, 28);
 
   const recommendations = useMemo(
     () => HEROES.filter((hero) => !enemies.some((enemy) => enemy.name === hero.name) && hero.lane.includes(lane))
@@ -277,7 +274,7 @@ export default function Home() {
           </div>
 
           <div className="hero-grid" aria-live="polite">
-            {visibleHeroes.map((hero) => {
+            {heroList.map((hero) => {
               const pickIndex = enemies.findIndex((enemy) => enemy.name === hero.name);
               return (
                 <button
@@ -294,13 +291,6 @@ export default function Home() {
               );
             })}
           </div>
-
-          {!query && heroList.length > 28 && (
-            <button className="show-all" type="button" onClick={() => setShowAll((value) => !value)}>
-              {showAll ? t.collapseHeroes : t.showAllHeroes(heroList.length)}
-              <span>{showAll ? "↑" : "↓"}</span>
-            </button>
-          )}
 
           <div className="lane-section">
             <div className="step-heading compact">
