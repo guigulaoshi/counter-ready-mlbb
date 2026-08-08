@@ -51,7 +51,8 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(page, /Array\.from\(\{ length: 5 \}/);
   assert.match(page, /useState<Hero\[\]>\(\[\]\)/);
   assert.match(page, /\["value"\]>\("Exp Lane"\)/);
-  assert.doesNotMatch(page, /slice\(0, 28\)|showAll|visibleHeroes/);
+  assert.match(page, /slice\(0, 28\)/);
+  assert.match(page, /showAllHeroes/);
   assert.doesNotMatch(page, /HEROES\.find\(\(hero\) => hero\.name === "Hanabi"\)/);
   assert.doesNotMatch(page, /current\.length > 1/);
   assert.doesNotMatch(page, /熟练度/);
