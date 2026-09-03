@@ -24,9 +24,11 @@ test("renders the finished counter picker", async () => {
   assert.match(html, /PATCH[\s\S]{0,30}2\.1\.90/);
   assert.match(html, /敌方选了谁/);
   assert.match(html, /敌方阵容/);
-  assert.match(html, /1–5 名敌方英雄/);
+  assert.match(html, /先填敌方阵容/);
   assert.match(html, /你打哪条路/);
-  assert.match(html, /暂无同路实测克制数据/);
+  assert.match(html, /暂无同路实测关系数据/);
+  assert.match(html, /队友已经选了谁/);
+  assert.match(html, /我方队友/);
   assert.match(html, /Mythic\+/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview|SkeletonPreview/);
 });
@@ -40,16 +42,20 @@ test("ships complete local hero data and social preview", async () => {
   ]);
   assert.equal((data.match(/"id":/g) ?? []).length, 133);
   assert.match(data, /patch: "2\.1\.90"/);
-  assert.match(data, /snapshot: "2026-08-06"/);
+  assert.match(data, /snapshot: "2026-09-03"/);
   assert.match(data, /rank: "Mythic\+"/);
   assert.match(data, /timeframe: "近 7 日"/);
   for (const lane of ["Exp Lane", "Gold Lane", "Mid Lane", "Jungle", "Roam"]) {
     assert.match(page, new RegExp(lane));
   }
   assert.match(page, /getMatchupEdge/);
+  assert.match(page, /getSynergyEdge/);
   assert.doesNotMatch(page, /candidate\.wr|overallWinRateDiff/);
-  assert.match(page, /Array\.from\(\{ length: 5 \}/);
-  assert.match(page, /useState<Hero\[\]>\(\[\]\)/);
+  assert.match(page, /Array\.from\(\{ length: limit \}/);
+  assert.match(page, /const MAX_ENEMIES = 5;/);
+  assert.match(page, /const MAX_ALLIES = 4;/);
+  assert.match(page, /const \[enemies, setEnemies\] = useState<Hero\[\]>\(\[\]\)/);
+  assert.match(page, /const \[allies, setAllies\] = useState<Hero\[\]>\(\[\]\)/);
   assert.match(page, /\["value"\]>\("Exp Lane"\)/);
   assert.match(page, /slice\(0, 28\)/);
   assert.match(page, /showAllHeroes/);
@@ -62,7 +68,9 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(page, /navigator\.language/);
   assert.match(i18n, /Who did the enemy pick\?/);
   assert.match(i18n, /敌方选了谁？/);
-  assert.match(i18n, /只按实测克制关系排序，不参考全局胜率/);
+  assert.match(i18n, /只按实测克制与配合关系排序，不参考全局胜率/);
+  assert.match(i18n, /Ranked only by measured counter and synergy relationships/);
+  assert.match(i18n, /Who did your team lock in\?/);
   assert.match(staticHtml, /Counter Ready/);
   await access(new URL("../public/og-v2.png", import.meta.url));
   await assert.rejects(access(new URL("../app/_sites-preview", import.meta.url)));

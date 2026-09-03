@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DATA_META, HEROES, type Hero } from "./data";
 import { COPY, ROLE_LABELS, SPEC_LABELS, type Locale } from "./i18n";
-import { getMatchupEdge } from "./matchups";
+import { getMatchupEdge, getSynergyEdge } from "./matchups";
 
 const LANES = [
   { value: "Exp Lane", zh: "经验路", en: "EXP Lane", short: "EXP", icon: "⚔" },
@@ -13,15 +13,23 @@ const LANES = [
   { value: "Roam", zh: "游走", en: "Roam", short: "ROAM", icon: "◇" },
 ] as const;
 
+const MAX_ENEMIES = 5;
+const MAX_ALLIES = 4;
+
 const SHOWCASE_HEROES = ["Miya", "Alucard", "Layla"]
   .map((name) => HEROES.find((hero) => hero.name === name))
   .filter((hero): hero is Hero => Boolean(hero));
 
+type Side = "enemy" | "ally";
+
 type Recommendation = Hero & {
   score: number;
   displayScore: number;
+  counterScore: number;
+  synergyScore: number;
   directEdges: { enemy: string; edge: number }[];
   threats: { enemy: string; edge: number }[];
+  synergies: { ally: string; edge: number }[];
   coverage: number;
   reasons: string[];
 };
@@ -30,9 +38,15 @@ function normalize(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-function scoreCandidate(candidate: Hero, enemies: Hero[], locale: Locale): Recommendation {
+/**
+ * Both terms are measured win-rate swings in percentage points, so they add directly.
+ * Each is a mean rather than a sum: that keeps the counter and synergy terms weighted
+ * the same way no matter how many enemies or allies have been locked in so far.
+ */
+function scoreCandidate(candidate: Hero, enemies: Hero[], allies: Hero[], locale: Locale): Recommendation {
   const directEdges: { enemy: string; edge: number }[] = [];
   const threats: { enemy: string; edge: number }[] = [];
+  const synergies: { ally: string; edge: number }[] = [];
 
   for (const enemy of enemies) {
     const edge = getMatchupEdge(candidate.name, enemy.name);
@@ -40,13 +54,26 @@ function scoreCandidate(candidate: Hero, enemies: Hero[], locale: Locale): Recom
     if (edge < 0) threats.push({ enemy: enemy.name, edge: Math.abs(edge) });
   }
 
+  for (const ally of allies) {
+    const edge = getSynergyEdge(candidate.name, ally.name);
+    if (edge > 0) synergies.push({ ally: ally.name, edge });
+  }
+
   const favorableEdge = directEdges.reduce((sum, item) => sum + item.edge, 0);
   const unfavorableEdge = threats.reduce((sum, item) => sum + item.edge, 0);
-  const score = favorableEdge - unfavorableEdge;
+  const synergyEdge = synergies.reduce((sum, item) => sum + item.edge, 0);
+  const counterScore = enemies.length > 0 ? (favorableEdge - unfavorableEdge) / enemies.length : 0;
+  const synergyScore = allies.length > 0 ? synergyEdge / allies.length : 0;
+  const score = counterScore + synergyScore;
+
   const t = COPY[locale];
+  const positives = [
+    ...directEdges.map((item) => ({ edge: item.edge, text: t.edgeReason(item.enemy, item.edge) })),
+    ...synergies.map((item) => ({ edge: item.edge, text: t.synergyReason(item.ally, item.edge) })),
+  ].sort((a, b) => b.edge - a.edge);
   const reasons = [
-    ...directEdges.map((item) => t.edgeReason(item.enemy, item.edge)),
-    ...threats.map((item) => t.threatReason(item.enemy, item.edge)),
+    ...positives.map((item) => item.text),
+    ...threats.sort((a, b) => b.edge - a.edge).map((item) => t.threatReason(item.enemy, item.edge)),
     ...(directEdges.length > 1 ? [t.coverageReason(directEdges.length, enemies.length)] : []),
   ];
 
@@ -54,8 +81,11 @@ function scoreCandidate(candidate: Hero, enemies: Hero[], locale: Locale): Recom
     ...candidate,
     score,
     displayScore: Number(score.toFixed(1)),
+    counterScore,
+    synergyScore,
     directEdges,
     threats,
+    synergies,
     coverage: directEdges.length,
     reasons: [...new Set(reasons)].slice(0, 3),
   };
@@ -77,6 +107,8 @@ function HeroPortrait({ hero, size = "normal" }: { hero: Hero; size?: "small" | 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>("zh");
   const [enemies, setEnemies] = useState<Hero[]>([]);
+  const [allies, setAllies] = useState<Hero[]>([]);
+  const [target, setTarget] = useState<Side>("enemy");
   const [lane, setLane] = useState<(typeof LANES)[number]["value"]>("Exp Lane");
   const [query, setQuery] = useState("");
   const [role, setRole] = useState("All");
@@ -116,14 +148,20 @@ export default function Home() {
     document.documentElement.lang = nextLocale === "zh" ? "zh-CN" : "en";
   };
 
-  const selectEnemy = (hero: Hero) => {
-    setEnemies((current) => {
-      const isSelected = current.some((item) => item.name === hero.name);
-      const next = isSelected
-        ? current.filter((item) => item.name !== hero.name)
-        : (current.length >= 5 ? [...current.slice(1), hero] : [...current, hero]);
-      return next;
-    });
+  const addTo = (limit: number) => (current: Hero[], hero: Hero) =>
+    current.length >= limit ? [...current.slice(1), hero] : [...current, hero];
+
+  /** One grid feeds both lineups: a picked hero is removed, a new hero joins the active side. */
+  const selectHero = (hero: Hero) => {
+    if (enemies.some((item) => item.name === hero.name)) {
+      setEnemies((current) => current.filter((item) => item.name !== hero.name));
+    } else if (allies.some((item) => item.name === hero.name)) {
+      setAllies((current) => current.filter((item) => item.name !== hero.name));
+    } else if (target === "enemy") {
+      setEnemies((current) => addTo(MAX_ENEMIES)(current, hero));
+    } else {
+      setAllies((current) => addTo(MAX_ALLIES)(current, hero));
+    }
     setQuery("");
   };
 
@@ -137,11 +175,13 @@ export default function Home() {
   const visibleHeroes = query || showAll ? heroList : heroList.slice(0, 28);
 
   const recommendations = useMemo(
-    () => HEROES.filter((hero) => !enemies.some((enemy) => enemy.name === hero.name) && hero.lane.includes(lane))
-      .map((hero) => scoreCandidate(hero, enemies, locale))
-      .filter((hero) => hero.coverage > 0 && hero.score > 0)
+    () => HEROES.filter((hero) => !enemies.some((enemy) => enemy.name === hero.name))
+      .filter((hero) => !allies.some((ally) => ally.name === hero.name))
+      .filter((hero) => hero.lane.includes(lane))
+      .map((hero) => scoreCandidate(hero, enemies, allies, locale))
+      .filter((hero) => (hero.coverage > 0 || hero.synergies.length > 0) && hero.score > 0)
       .sort((a, b) => b.score - a.score || b.coverage - a.coverage),
-    [enemies, lane, locale],
+    [enemies, allies, lane, locale],
   );
 
   const best = recommendations[0];
@@ -149,9 +189,11 @@ export default function Home() {
 
   const shareResult = async () => {
     const laneLabel = locale === "zh" ? laneMeta.zh : laneMeta.en;
-    const enemyNames = enemies.map((enemy) => enemy.name).join(locale === "zh" ? "、" : ", ");
+    const separator = locale === "zh" ? "、" : ", ";
+    const enemyNames = enemies.map((enemy) => enemy.name).join(separator);
+    const allyNames = allies.map((ally) => ally.name).join(separator);
     if (!best) return;
-    const text = t.share(DATA_META.patch, best.name, laneLabel, enemyNames, best.displayScore);
+    const text = t.share(DATA_META.patch, best.name, laneLabel, enemyNames, allyNames, best.displayScore);
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -159,6 +201,35 @@ export default function Home() {
     } catch {
       setCopied(false);
     }
+  };
+
+  const renderSlots = (side: Side) => {
+    const picks = side === "enemy" ? enemies : allies;
+    const limit = side === "enemy" ? MAX_ENEMIES : MAX_ALLIES;
+    return (
+      <div
+        className={`enemy-slots slots-${side} ${target === side ? "targeted" : ""}`}
+        aria-label={side === "enemy" ? t.selectedLineupLabel : t.selectedAllyLabel}
+      >
+        {Array.from({ length: limit }, (_, index) => {
+          const selected = picks[index];
+          return selected ? (
+            <button type="button" className="enemy-slot filled" key={selected.id} onClick={() => selectHero(selected)} aria-label={t.cancelHero(selected.name)}>
+              <span className="slot-number">{index + 1}</span>
+              <HeroPortrait hero={selected} size="small" />
+              <span className="slot-name">{selected.name}</span>
+              <span className="slot-remove">×</span>
+            </button>
+          ) : (
+            <button type="button" className="enemy-slot empty" key={`empty-${index}`} onClick={() => setTarget(side)}>
+              <span className="slot-number">{index + 1}</span>
+              <span className="slot-plus">＋</span>
+              <span className="slot-name">{side === "enemy" ? t.pending : t.allyPending}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
@@ -197,7 +268,7 @@ export default function Home() {
           <p>{t.introDescription}</p>
           <div className="hero-facts">
             <span><b>MYTHIC+</b>{t.matchupOnly}</span>
-            <span><b>1–5</b>{t.enemyFact}</span>
+            <span><b>5 + 4</b>{t.enemyFact}</span>
             <span><b>{DATA_META.patch}</b>{t.patchFact}</span>
           </div>
         </div>
@@ -226,28 +297,36 @@ export default function Home() {
               <div className="mini-stack">
                 {enemies.map((enemy) => <HeroPortrait hero={enemy} size="small" key={enemy.id} />)}
               </div>
-              <b>{enemies.length}/5</b>
+              <b>{enemies.length}/{MAX_ENEMIES}</b>
             </div>
           </div>
 
-          <div className="enemy-slots" aria-label={t.selectedLineupLabel}>
-            {Array.from({ length: 5 }, (_, index) => {
-              const selected = enemies[index];
-              return selected ? (
-                <button type="button" className="enemy-slot filled" key={selected.id} onClick={() => selectEnemy(selected)} aria-label={t.cancelHero(selected.name)}>
-                  <span className="slot-number">{index + 1}</span>
-                  <HeroPortrait hero={selected} size="small" />
-                  <span className="slot-name">{selected.name}</span>
-                  <span className="slot-remove">×</span>
-                </button>
-              ) : (
-                <div className="enemy-slot empty" key={`empty-${index}`}>
-                  <span className="slot-number">{index + 1}</span>
-                  <span className="slot-plus">＋</span>
-                  <span className="slot-name">{t.pending}</span>
-                </div>
-              );
-            })}
+          {renderSlots("enemy")}
+
+          <div className="step-heading ally-heading">
+            <span className="step-number">02</span>
+            <div>
+              <h2>{t.allyTitle}</h2>
+              <p>{t.allyHelp}</p>
+            </div>
+            <div className="current-enemy current-lineup">
+              <span>{t.allyLineup}</span>
+              <div className="mini-stack">
+                {allies.map((ally) => <HeroPortrait hero={ally} size="small" key={ally.id} />)}
+              </div>
+              <b>{allies.length}/{MAX_ALLIES}</b>
+            </div>
+          </div>
+
+          {renderSlots("ally")}
+
+          <div className="pick-target" aria-label={t.pickTargetLabel}>
+            <button type="button" className={target === "enemy" ? "active enemy" : ""} onClick={() => setTarget("enemy")} aria-pressed={target === "enemy"}>
+              {t.pickEnemy}
+            </button>
+            <button type="button" className={target === "ally" ? "active ally" : ""} onClick={() => setTarget("ally")} aria-pressed={target === "ally"}>
+              {t.pickAlly}
+            </button>
           </div>
 
           <label className="search-box">
@@ -278,18 +357,21 @@ export default function Home() {
 
           <div className="hero-grid" aria-live="polite">
             {visibleHeroes.map((hero) => {
-              const pickIndex = enemies.findIndex((enemy) => enemy.name === hero.name);
+              const enemyIndex = enemies.findIndex((enemy) => enemy.name === hero.name);
+              const allyIndex = allies.findIndex((ally) => ally.name === hero.name);
+              const pickIndex = enemyIndex >= 0 ? enemyIndex : allyIndex;
+              const side = enemyIndex >= 0 ? "enemy" : allyIndex >= 0 ? "ally" : null;
               return (
                 <button
                   type="button"
-                  className={`hero-tile ${pickIndex >= 0 ? "selected" : ""}`}
+                  className={`hero-tile ${side ? `selected selected-${side}` : ""}`}
                   key={hero.id}
-                  onClick={() => selectEnemy(hero)}
+                  onClick={() => selectHero(hero)}
                   aria-pressed={pickIndex >= 0}
                 >
                   <HeroPortrait hero={hero} />
                   <span>{hero.name}</span>
-                  {pickIndex >= 0 && <i className="pick-order">{pickIndex + 1}</i>}
+                  {pickIndex >= 0 && <i className={`pick-order pick-${side}`}>{pickIndex + 1}</i>}
                 </button>
               );
             })}
@@ -304,7 +386,7 @@ export default function Home() {
 
           <div className="lane-section">
             <div className="step-heading compact">
-              <span className="step-number">02</span>
+              <span className="step-number">03</span>
               <div>
                 <h2>{t.laneTitle}</h2>
                 <p>{t.laneHelp}</p>
@@ -332,7 +414,7 @@ export default function Home() {
           <div className="result-kicker">
             <span className="pulse" />
             {t.calculating}
-            <span>{t.compared(recommendations.length, enemies.length)}</span>
+            <span>{t.compared(recommendations.length, enemies.length, allies.length)}</span>
           </div>
 
           <div className="matchup-line">
@@ -343,10 +425,17 @@ export default function Home() {
               <span><small>{t.enemyLineup}</small><b>{t.heroesCount(enemies.length)}</b></span>
             </div>
             <i>VS</i>
-            <div>
-              <span><small>{t.yourLane}</small><b>{locale === "zh" ? laneMeta.zh : laneMeta.en}</b></span>
-              <span className="lane-badge">{laneMeta.icon}</span>
+            <div className="ally-summary">
+              <div className="result-enemy-stack">
+                {allies.map((ally) => <HeroPortrait hero={ally} size="small" key={ally.id} />)}
+              </div>
+              <span><small>{t.allyLineup}</small><b>{t.heroesCount(allies.length)}</b></span>
             </div>
+          </div>
+
+          <div className="matchup-line lane-line">
+            <span><small>{t.yourLane}</small><b>{locale === "zh" ? laneMeta.zh : laneMeta.en}</b></span>
+            <span className="lane-badge">{laneMeta.icon}</span>
           </div>
 
           {best ? <div className="best-card">
@@ -373,7 +462,8 @@ export default function Home() {
             </ul>
 
             <div className="stat-row">
-              <div><span>{t.netEdge}</span><b>+{best.displayScore.toFixed(1)}pp</b></div>
+              <div><span>{t.counterEdge}</span><b>{best.counterScore >= 0 ? "+" : ""}{best.counterScore.toFixed(1)}pp</b></div>
+              <div><span>{t.synergyEdge}</span><b>+{best.synergyScore.toFixed(1)}pp</b></div>
               <div><span>{t.counterCoverage}</span><b>{best.coverage}/{enemies.length}</b></div>
               <div><span>{t.reverseThreats}</span><b>{best.threats.length}</b></div>
             </div>
@@ -391,9 +481,9 @@ export default function Home() {
                 <HeroPortrait hero={hero} size="small" />
                 <div>
                   <b>{hero.name}</b>
-                  <small>{t.matchupSummary(hero.directEdges.length, hero.displayScore)}</small>
+                  <small>{t.matchupSummary(hero.directEdges.length, hero.synergies.length, hero.displayScore)}</small>
                 </div>
-                <strong>{hero.displayScore}</strong>
+                <strong>{hero.displayScore.toFixed(1)}</strong>
               </div>
             ))}
           </div>
@@ -402,6 +492,11 @@ export default function Home() {
             <span>{copied ? "✓" : "＋"}</span>
             {copied ? t.copied : t.copy}
           </button>
+
+          <p className="formula-note">
+            <b>{t.formulaTitle}</b>
+            {t.formulaBody}
+          </p>
 
           <p className="disclaimer">
             {t.disclaimer}
