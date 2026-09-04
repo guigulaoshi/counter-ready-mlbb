@@ -243,6 +243,14 @@ button.enemy-slot { cursor: pointer; }
 .alternative-card small { color: var(--muted); font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .alternative-card > strong { color: var(--lime); font-size: 13px; }
 
+.avoid-section { margin-top: 22px; padding-top: 16px; border-top: 1px dashed rgba(255,101,120,.28); }
+.avoid-heading { margin-top: 0; }
+.avoid-heading h3 { color: var(--red); }
+.avoid-heading h3::before { content: "⚠ "; font-size: 11px; }
+.avoid-card { background: rgba(255,101,120,.05); border-color: rgba(255,101,120,.14); }
+.avoid-card:hover { border-color: rgba(255,101,120,.45); }
+.avoid-card .rank { color: rgba(255,101,120,.6); }
+.avoid-card > strong { color: var(--red); }
 .copy-button { width: 100%; margin-top: 14px; height: 46px; border: 1px solid var(--lime); color: #151006; background: var(--lime); font-size: 11px; font-weight: 900; letter-spacing: .03em; cursor: pointer; transition: .16s ease; }
 .copy-button:hover { background: #ffdc84; box-shadow: 0 0 28px rgba(245,200,91,.16); }
 .copy-button:disabled { cursor: not-allowed; opacity: .42; box-shadow: none; }

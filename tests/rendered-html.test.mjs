@@ -60,6 +60,11 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(page, /slice\(0, 28\)/);
   assert.match(page, /showAllHeroes/);
   assert.match(page, /recommendations\.slice\(1, 10\)/);
+  assert.match(page, /const MAX_AVOID = 5;/);
+  assert.match(page, /hero\.threats\.length > 0 && hero\.score < 0/);
+  assert.match(page, /className="alternative-card avoid-card"/);
+  assert.match(i18n, /不建议选/);
+  assert.match(i18n, /Avoid these picks/);
   assert.match(page, /padStart\(2, "0"\)/);
   assert.doesNotMatch(page, /HEROES\.find\(\(hero\) => hero\.name === "Hanabi"\)/);
   assert.doesNotMatch(page, /current\.length > 1/);

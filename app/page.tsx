@@ -15,6 +15,7 @@ const LANES = [
 
 const MAX_ENEMIES = 5;
 const MAX_ALLIES = 4;
+const MAX_AVOID = 5;
 
 const SHOWCASE_HEROES = ["Miya", "Alucard", "Layla"]
   .map((name) => HEROES.find((hero) => hero.name === name))
@@ -174,14 +175,28 @@ export default function Home() {
 
   const visibleHeroes = query || showAll ? heroList : heroList.slice(0, 28);
 
-  const recommendations = useMemo(
+  const scoredCandidates = useMemo(
     () => HEROES.filter((hero) => !enemies.some((enemy) => enemy.name === hero.name))
       .filter((hero) => !allies.some((ally) => ally.name === hero.name))
       .filter((hero) => hero.lane.includes(lane))
-      .map((hero) => scoreCandidate(hero, enemies, allies, locale))
+      .map((hero) => scoreCandidate(hero, enemies, allies, locale)),
+    [enemies, allies, lane, locale],
+  );
+
+  const recommendations = useMemo(
+    () => scoredCandidates
       .filter((hero) => (hero.coverage > 0 || hero.synergies.length > 0) && hero.score > 0)
       .sort((a, b) => b.score - a.score || b.coverage - a.coverage),
-    [enemies, allies, lane, locale],
+    [scoredCandidates],
+  );
+
+  /** Heroes the enemy lineup measurably counters: net negative even after any synergy credit. */
+  const avoidPicks = useMemo(
+    () => scoredCandidates
+      .filter((hero) => hero.threats.length > 0 && hero.score < 0)
+      .sort((a, b) => a.score - b.score || b.threats.length - a.threats.length)
+      .slice(0, MAX_AVOID),
+    [scoredCandidates],
   );
 
   const best = recommendations[0];
@@ -487,6 +502,31 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          {avoidPicks.length > 0 && (
+            <section className="avoid-section" aria-labelledby="avoid-heading">
+              <div className="alternatives-heading avoid-heading">
+                <h3 id="avoid-heading">{t.avoidTitle}</h3>
+                <span>{t.avoidExplanation}</span>
+              </div>
+              <div className="alternatives">
+                {avoidPicks.map((hero, index) => {
+                  const worst = [...hero.threats].sort((a, b) => b.edge - a.edge)[0];
+                  return (
+                    <div className="alternative-card avoid-card" key={hero.id}>
+                      <span className="rank">{String(index + 1).padStart(2, "0")}</span>
+                      <HeroPortrait hero={hero} size="small" />
+                      <div>
+                        <b>{hero.name}</b>
+                        <small>{t.avoidSummary(worst.enemy, worst.edge, hero.threats.length, enemies.length)}</small>
+                      </div>
+                      <strong>{hero.displayScore.toFixed(1)}</strong>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
           <button className="copy-button" type="button" onClick={shareResult} disabled={!best}>
             <span>{copied ? "✓" : "＋"}</span>

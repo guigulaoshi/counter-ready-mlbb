@@ -68,6 +68,10 @@ export const COPY = {
     sortExplanation: "只按实测克制与配合关系排序，不参考全局胜率",
     matchupSummary: (counters: number, synergies: number, edge: number) =>
       `克制 ${counters} · 配合 ${synergies} · 综合 +${edge.toFixed(1)}pp`,
+    avoidTitle: "不建议选",
+    avoidExplanation: "同路英雄里被敌方实测反克制、综合分为负的选择",
+    avoidSummary: (enemy: string, edge: number, threats: number, enemies: number) =>
+      `被 ${enemy} 反克制 ${edge.toFixed(1)}pp · 被克 ${threats}/${enemies}`,
     noCounterTitle: "暂无同路实测关系数据",
     noCounterHelp: "不会用全局胜率猜测推荐；请换一个位置，或多填几名敌方/队友英雄。",
     copied: "结果已复制",
@@ -131,6 +135,10 @@ export const COPY = {
     sortExplanation: "Ranked only by measured counter and synergy relationships; global win rate is ignored",
     matchupSummary: (counters: number, synergies: number, edge: number) =>
       `${counters} countered · ${synergies} synerg${synergies === 1 ? "y" : "ies"} · +${edge.toFixed(1)}pp`,
+    avoidTitle: "Avoid these picks",
+    avoidExplanation: "Lane picks the enemy lineup measurably counters, with a negative combined score",
+    avoidSummary: (enemy: string, edge: number, threats: number, enemies: number) =>
+      `${enemy} counters by ${edge.toFixed(1)}pp · countered ${threats}/${enemies}`,
     noCounterTitle: "No measured relationship in this lane",
     noCounterHelp: "We will not guess from global win rate. Try another lane, or add more enemy and ally picks.",
     copied: "Result copied",
