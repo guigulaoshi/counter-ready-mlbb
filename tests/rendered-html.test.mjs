@@ -42,7 +42,7 @@ test("ships complete local hero data and social preview", async () => {
   ]);
   assert.equal((data.match(/"id":/g) ?? []).length, 133);
   assert.match(data, /patch: "2\.1\.90"/);
-  assert.match(data, /snapshot: "2026-09-03"/);
+  assert.match(data, /snapshot: "\d{4}-\d{2}-\d{2}"/);
   assert.match(data, /rank: "Mythic\+"/);
   assert.match(data, /timeframe: "近 7 日"/);
   for (const lane of ["Exp Lane", "Gold Lane", "Mid Lane", "Jungle", "Roam"]) {

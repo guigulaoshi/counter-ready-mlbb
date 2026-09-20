@@ -13,7 +13,7 @@ export type Hero = {
 export const DATA_META = {
   patch: "2.1.90",
   season: "S41",
-  snapshot: "2026-09-03",
+  snapshot: "2026-09-20",
   rank: "Mythic+",
   rankLabel: "神话 + 神话荣耀",
   timeframe: "近 7 日",
@@ -35,9 +35,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Magic Damage"
     ],
-    "wr": 50.5,
-    "pr": 0.9,
-    "br": 5.35
+    "wr": 52.3,
+    "pr": 0.75,
+    "br": 4.4
   },
   {
     "id": 9,
@@ -53,9 +53,9 @@ export const HEROES: Hero[] = [
       "Guard",
       "Crowd Control"
     ],
-    "wr": 51.2,
-    "pr": 0.5,
-    "br": 7
+    "wr": 48.7,
+    "pr": 0.35,
+    "br": 2.65
   },
   {
     "id": 64,
@@ -71,9 +71,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Support"
     ],
-    "wr": 49.9,
-    "pr": 0.45,
-    "br": 0.65
+    "wr": 50.75,
+    "pr": 0.35,
+    "br": 0.5
   },
   {
     "id": 4,
@@ -91,9 +91,9 @@ export const HEROES: Hero[] = [
       "Charge",
       "Regen"
     ],
-    "wr": 49.95,
-    "pr": 0.5,
-    "br": 4.6
+    "wr": 50.2,
+    "pr": 0.9,
+    "br": 1.2
   },
   {
     "id": 28,
@@ -110,9 +110,9 @@ export const HEROES: Hero[] = [
       "Charge",
       "Damage"
     ],
-    "wr": 45.95,
-    "pr": 1.2,
-    "br": 0.75
+    "wr": 39.95,
+    "pr": 0.25,
+    "br": 0.1
   },
   {
     "id": 7,
@@ -129,9 +129,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Damage"
     ],
-    "wr": 49.05,
-    "pr": 0.6,
-    "br": 0.5
+    "wr": 45.55,
+    "pr": 0.3,
+    "br": 0.1
   },
   {
     "id": 55,
@@ -147,9 +147,9 @@ export const HEROES: Hero[] = [
       "Guard",
       "Support"
     ],
-    "wr": 48.75,
-    "pr": 1.6,
-    "br": 13.95
+    "wr": 46.6,
+    "pr": 1.75,
+    "br": 9.75
   },
   {
     "id": 45,
@@ -165,9 +165,9 @@ export const HEROES: Hero[] = [
       "Charge",
       "Burst"
     ],
-    "wr": 55.35,
-    "pr": 0.45,
-    "br": 0.85
+    "wr": 50.5,
+    "pr": 0.4,
+    "br": 0.95
   },
   {
     "id": 120,
@@ -184,9 +184,9 @@ export const HEROES: Hero[] = [
       "Charge",
       "Burst"
     ],
-    "wr": 47.55,
-    "pr": 0.3,
-    "br": 0.5
+    "wr": 53.8,
+    "pr": 0.65,
+    "br": 0.25
   },
   {
     "id": 93,
@@ -202,9 +202,9 @@ export const HEROES: Hero[] = [
       "Crowd Control",
       "Initiator"
     ],
-    "wr": 53.1,
-    "pr": 0.85,
-    "br": 15.2
+    "wr": 54.6,
+    "pr": 1.8,
+    "br": 37.7
   },
   {
     "id": 108,
@@ -220,9 +220,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Charge"
     ],
-    "wr": 50.5,
-    "pr": 0.2,
-    "br": 0.35
+    "wr": 53.85,
+    "pr": 0.45,
+    "br": 1.65
   },
   {
     "id": 36,
@@ -238,9 +238,9 @@ export const HEROES: Hero[] = [
       "Crowd Control",
       "Poke"
     ],
-    "wr": 48.75,
-    "pr": 0.55,
-    "br": 0.5
+    "wr": 48.05,
+    "pr": 0.5,
+    "br": 0.3
   },
   {
     "id": 77,
@@ -257,9 +257,9 @@ export const HEROES: Hero[] = [
       "Charge",
       "Burst"
     ],
-    "wr": 50.75,
-    "pr": 0.95,
-    "br": 1
+    "wr": 45.1,
+    "pr": 1.45,
+    "br": 7.5
   },
   {
     "id": 2,
@@ -276,9 +276,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Regen"
     ],
-    "wr": 47.3,
-    "pr": 1,
-    "br": 0.85
+    "wr": 39.45,
+    "pr": 0.15,
+    "br": 0.1
   },
   {
     "id": 11,
@@ -296,9 +296,9 @@ export const HEROES: Hero[] = [
       "Push",
       "Burst"
     ],
-    "wr": 51.65,
-    "pr": 0.4,
-    "br": 0.25
+    "wr": 45.9,
+    "pr": 0.1,
+    "br": 0.05
   },
   {
     "id": 99,
@@ -315,9 +315,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Crowd Control"
     ],
-    "wr": 52.55,
-    "pr": 0.55,
-    "br": 2.25
+    "wr": 51.6,
+    "pr": 1.2,
+    "br": 8.2
   },
   {
     "id": 87,
@@ -334,7 +334,7 @@ export const HEROES: Hero[] = [
       "Support",
       "Damage"
     ],
-    "wr": 46.15,
+    "wr": 49.8,
     "pr": 0.1,
     "br": 0.2
   },
@@ -352,9 +352,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Damage"
     ],
-    "wr": 49.25,
-    "pr": 0.55,
-    "br": 0.7
+    "wr": 51.05,
+    "pr": 1.1,
+    "br": 2.65
   },
   {
     "id": 70,
@@ -370,9 +370,9 @@ export const HEROES: Hero[] = [
       "Crowd Control",
       "Regen"
     ],
-    "wr": 53.95,
-    "pr": 1.55,
-    "br": 59.55
+    "wr": 47.8,
+    "pr": 2.15,
+    "br": 58.25
   },
   {
     "id": 97,
@@ -389,9 +389,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Burst"
     ],
-    "wr": 53.2,
-    "pr": 0.35,
-    "br": 0.7
+    "wr": 54.25,
+    "pr": 0.65,
+    "br": 0.35
   },
   {
     "id": 100,
@@ -407,9 +407,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Finisher"
     ],
-    "wr": 49,
-    "pr": 0.55,
-    "br": 1.2
+    "wr": 48.8,
+    "pr": 1.1,
+    "br": 1.8
   },
   {
     "id": 12,
@@ -425,9 +425,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Burst"
     ],
-    "wr": 47.05,
-    "pr": 0.1,
-    "br": 0.1
+    "wr": 50.5,
+    "pr": 1.35,
+    "br": 2.4
   },
   {
     "id": 92,
@@ -444,9 +444,9 @@ export const HEROES: Hero[] = [
       "Crowd Control",
       "Damage"
     ],
-    "wr": 52.75,
-    "pr": 0.7,
-    "br": 1.75
+    "wr": 54.3,
+    "pr": 1.55,
+    "br": 15.2
   },
   {
     "id": 91,
@@ -462,8 +462,8 @@ export const HEROES: Hero[] = [
       "Poke",
       "Burst"
     ],
-    "wr": 49.7,
-    "pr": 0.6,
+    "wr": 50,
+    "pr": 0.7,
     "br": 0.25
   },
   {
@@ -480,9 +480,9 @@ export const HEROES: Hero[] = [
       "Poke",
       "Burst"
     ],
-    "wr": 48.6,
+    "wr": 49.05,
     "pr": 0.9,
-    "br": 0.75
+    "br": 0.8
   },
   {
     "id": 124,
@@ -499,9 +499,9 @@ export const HEROES: Hero[] = [
       "Support",
       "Crowd Control"
     ],
-    "wr": 46.25,
-    "pr": 0,
-    "br": 0.5
+    "wr": 54.95,
+    "pr": 0.1,
+    "br": 2.05
   },
   {
     "id": 26,
@@ -518,9 +518,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Control"
     ],
-    "wr": 45.85,
-    "pr": 1.15,
-    "br": 4.9
+    "wr": 45.55,
+    "pr": 1.1,
+    "br": 4.7
   },
   {
     "id": 123,
@@ -536,9 +536,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Regen"
     ],
-    "wr": 47,
-    "pr": 0.3,
-    "br": 1.9
+    "wr": 47.8,
+    "pr": 0.55,
+    "br": 1.65
   },
   {
     "id": 65,
@@ -554,8 +554,8 @@ export const HEROES: Hero[] = [
       "Burst",
       "Chase"
     ],
-    "wr": 48,
-    "pr": 0.65,
+    "wr": 47.35,
+    "pr": 0.6,
     "br": 0.45
   },
   {
@@ -572,8 +572,8 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Burst"
     ],
-    "wr": 48.65,
-    "pr": 0.6,
+    "wr": 48.35,
+    "pr": 0.55,
     "br": 0.75
   },
   {
@@ -590,9 +590,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Control"
     ],
-    "wr": 51.6,
+    "wr": 51.5,
     "pr": 0.75,
-    "br": 0.35
+    "br": 0.4
   },
   {
     "id": 48,
@@ -608,9 +608,9 @@ export const HEROES: Hero[] = [
       "Guard",
       "Poke"
     ],
-    "wr": 52.35,
-    "pr": 0.2,
-    "br": 4.35
+    "wr": 53.8,
+    "pr": 0.4,
+    "br": 10.4
   },
   {
     "id": 85,
@@ -627,9 +627,9 @@ export const HEROES: Hero[] = [
       "Charge",
       "Burst"
     ],
-    "wr": 49.85,
-    "pr": 1.85,
-    "br": 2.5
+    "wr": 46.15,
+    "pr": 1.25,
+    "br": 1.5
   },
   {
     "id": 111,
@@ -647,9 +647,9 @@ export const HEROES: Hero[] = [
       "Control",
       "Burst"
     ],
-    "wr": 51.1,
-    "pr": 0.2,
-    "br": 0.15
+    "wr": 51.55,
+    "pr": 0.35,
+    "br": 0.25
   },
   {
     "id": 81,
@@ -666,9 +666,9 @@ export const HEROES: Hero[] = [
       "Regen",
       "Mixed Damage"
     ],
-    "wr": 48.85,
-    "pr": 0.85,
-    "br": 3.15
+    "wr": 48.55,
+    "pr": 1.2,
+    "br": 3.1
   },
   {
     "id": 34,
@@ -684,9 +684,9 @@ export const HEROES: Hero[] = [
       "Regen",
       "Guard"
     ],
-    "wr": 54.05,
-    "pr": 0.65,
-    "br": 53.55
+    "wr": 48.8,
+    "pr": 0.6,
+    "br": 15.6
   },
   {
     "id": 15,
@@ -702,9 +702,9 @@ export const HEROES: Hero[] = [
       "Control",
       "Burst"
     ],
-    "wr": 51.75,
+    "wr": 48.8,
     "pr": 1.85,
-    "br": 57.75
+    "br": 60.3
   },
   {
     "id": 17,
@@ -720,9 +720,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Finisher"
     ],
-    "wr": 42.3,
-    "pr": 0.5,
-    "br": 2.25
+    "wr": 54.25,
+    "pr": 0.95,
+    "br": 6.5
   },
   {
     "id": 76,
@@ -740,9 +740,9 @@ export const HEROES: Hero[] = [
       "Guard",
       "Charge"
     ],
-    "wr": 49.95,
+    "wr": 46.95,
     "pr": 0.05,
-    "br": 0.35
+    "br": 0.25
   },
   {
     "id": 112,
@@ -758,9 +758,9 @@ export const HEROES: Hero[] = [
       "Poke",
       "Guard"
     ],
-    "wr": 53.75,
-    "pr": 0.85,
-    "br": 19.75
+    "wr": 50,
+    "pr": 2,
+    "br": 21
   },
   {
     "id": 10,
@@ -776,9 +776,9 @@ export const HEROES: Hero[] = [
       "Initiator",
       "Control"
     ],
-    "wr": 42.8,
-    "pr": 1.2,
-    "br": 6.55
+    "wr": 39.05,
+    "pr": 0.15,
+    "br": 0.75
   },
   {
     "id": 117,
@@ -795,9 +795,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Chase"
     ],
-    "wr": 50.5,
-    "pr": 0.45,
-    "br": 3.05
+    "wr": 50.85,
+    "pr": 0.75,
+    "br": 3.1
   },
   {
     "id": 22,
@@ -814,9 +814,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Damage"
     ],
-    "wr": 47,
-    "pr": 0.55,
-    "br": 2.35
+    "wr": 55.3,
+    "pr": 0.9,
+    "br": 5.8
   },
   {
     "id": 41,
@@ -834,9 +834,9 @@ export const HEROES: Hero[] = [
       "Crowd Control",
       "Burst"
     ],
-    "wr": 45.15,
-    "pr": 0.7,
-    "br": 0.55
+    "wr": 50.1,
+    "pr": 0.6,
+    "br": 0.4
   },
   {
     "id": 104,
@@ -853,9 +853,9 @@ export const HEROES: Hero[] = [
       "Regen",
       "Control"
     ],
-    "wr": 56.35,
-    "pr": 0.65,
-    "br": 53.7
+    "wr": 56.55,
+    "pr": 0.6,
+    "br": 51.8
   },
   {
     "id": 23,
@@ -871,9 +871,9 @@ export const HEROES: Hero[] = [
       "Poke",
       "Burst"
     ],
-    "wr": 52.6,
-    "pr": 0.9,
-    "br": 1.9
+    "wr": 52.5,
+    "pr": 0.8,
+    "br": 1.65
   },
   {
     "id": 79,
@@ -889,9 +889,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Finisher"
     ],
-    "wr": 40.65,
-    "pr": 1.25,
-    "br": 2.5
+    "wr": 45.7,
+    "pr": 1.65,
+    "br": 2.55
   },
   {
     "id": 44,
@@ -908,9 +908,9 @@ export const HEROES: Hero[] = [
       "Crowd Control",
       "Initiator"
     ],
-    "wr": 47.4,
-    "pr": 0.4,
-    "br": 1.5
+    "wr": 45,
+    "pr": 0.3,
+    "br": 0.3
   },
   {
     "id": 80,
@@ -927,8 +927,8 @@ export const HEROES: Hero[] = [
       "Magic Damage"
     ],
     "wr": 50.8,
-    "pr": 1.05,
-    "br": 9.2
+    "pr": 0.95,
+    "br": 7
   },
   {
     "id": 56,
@@ -945,9 +945,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Magic Damage"
     ],
-    "wr": 48.8,
+    "wr": 48.4,
     "pr": 1.75,
-    "br": 8.55
+    "br": 8.75
   },
   {
     "id": 60,
@@ -963,9 +963,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Damage"
     ],
-    "wr": 53.1,
-    "pr": 3.85,
-    "br": 14.95
+    "wr": 53.45,
+    "pr": 3.9,
+    "br": 16.5
   },
   {
     "id": 69,
@@ -981,9 +981,9 @@ export const HEROES: Hero[] = [
       "Poke",
       "Burst"
     ],
-    "wr": 53.6,
-    "pr": 0.75,
-    "br": 26.85
+    "wr": 45.85,
+    "pr": 0.45,
+    "br": 17.45
   },
   {
     "id": 73,
@@ -1000,9 +1000,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Damage"
     ],
-    "wr": 45.5,
+    "wr": 44.8,
     "pr": 0.1,
-    "br": 0.15
+    "br": 0.1
   },
   {
     "id": 42,
@@ -1020,9 +1020,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Poke"
     ],
-    "wr": 47.45,
-    "pr": 1.15,
-    "br": 15.25
+    "wr": 48.35,
+    "pr": 0.75,
+    "br": 5.55
   },
   {
     "id": 21,
@@ -1038,9 +1038,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Burst"
     ],
-    "wr": 48.5,
-    "pr": 0.85,
-    "br": 3.6
+    "wr": 48.15,
+    "pr": 0.8,
+    "br": 2.55
   },
   {
     "id": 51,
@@ -1057,9 +1057,9 @@ export const HEROES: Hero[] = [
       "Push",
       "Burst"
     ],
-    "wr": 48.3,
-    "pr": 0.85,
-    "br": 22.1
+    "wr": 48.6,
+    "pr": 0.9,
+    "br": 18.2
   },
   {
     "id": 35,
@@ -1077,9 +1077,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Regen"
     ],
-    "wr": 51.55,
-    "pr": 0.75,
-    "br": 5.05
+    "wr": 47.4,
+    "pr": 0.45,
+    "br": 6.65
   },
   {
     "id": 133,
@@ -1095,9 +1095,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Finisher"
     ],
-    "wr": 50.9,
+    "wr": 51.1,
     "pr": 0.55,
-    "br": 41.95
+    "br": 43.75
   },
   {
     "id": 49,
@@ -1113,9 +1113,9 @@ export const HEROES: Hero[] = [
       "Guard",
       "Initiator"
     ],
-    "wr": 48.7,
+    "wr": 49.1,
     "pr": 0.35,
-    "br": 0.95
+    "br": 0.75
   },
   {
     "id": 43,
@@ -1131,8 +1131,8 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Burst"
     ],
-    "wr": 52,
-    "pr": 0.45,
+    "wr": 51.4,
+    "pr": 0.4,
     "br": 0.55
   },
   {
@@ -1149,9 +1149,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Damage"
     ],
-    "wr": 48.5,
+    "wr": 48.35,
     "pr": 0.9,
-    "br": 1.95
+    "br": 2
   },
   {
     "id": 54,
@@ -1168,9 +1168,9 @@ export const HEROES: Hero[] = [
       "Charge",
       "Burst"
     ],
-    "wr": 48.1,
-    "pr": 0.45,
-    "br": 0.55
+    "wr": 48.2,
+    "pr": 0.5,
+    "br": 0.7
   },
   {
     "id": 32,
@@ -1187,9 +1187,9 @@ export const HEROES: Hero[] = [
       "Support",
       "Crowd Control"
     ],
-    "wr": 50,
-    "pr": 0.95,
-    "br": 3.5
+    "wr": 54.9,
+    "pr": 0.65,
+    "br": 3
   },
   {
     "id": 118,
@@ -1205,9 +1205,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Damage"
     ],
-    "wr": 47.35,
+    "wr": 46.95,
     "pr": 0.1,
-    "br": 0.35
+    "br": 0.3
   },
   {
     "id": 116,
@@ -1225,8 +1225,8 @@ export const HEROES: Hero[] = [
       "Chase",
       "Magic Damage"
     ],
-    "wr": 50.2,
-    "pr": 1.1,
+    "wr": 50.45,
+    "pr": 1.05,
     "br": 2.8
   },
   {
@@ -1244,9 +1244,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Charge"
     ],
-    "wr": 50.95,
-    "pr": 0.85,
-    "br": 6.85
+    "wr": 50.75,
+    "pr": 0.75,
+    "br": 6.65
   },
   {
     "id": 25,
@@ -1262,9 +1262,9 @@ export const HEROES: Hero[] = [
       "Poke",
       "Finisher"
     ],
-    "wr": 51.7,
-    "pr": 0.5,
-    "br": 1.35
+    "wr": 51.6,
+    "pr": 0.55,
+    "br": 1.45
   },
   {
     "id": 62,
@@ -1281,9 +1281,9 @@ export const HEROES: Hero[] = [
       "Control",
       "Charge"
     ],
-    "wr": 47.95,
-    "pr": 0.55,
-    "br": 39.8
+    "wr": 46.9,
+    "pr": 0.65,
+    "br": 31.45
   },
   {
     "id": 128,
@@ -1300,9 +1300,9 @@ export const HEROES: Hero[] = [
       "Control",
       "Regen"
     ],
-    "wr": 43.55,
+    "wr": 44,
     "pr": 0.1,
-    "br": 0.45
+    "br": 0.35
   },
   {
     "id": 8,
@@ -1318,9 +1318,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Magic Damage"
     ],
-    "wr": 45.75,
+    "wr": 46.3,
     "pr": 0.7,
-    "br": 2.55
+    "br": 2.7
   },
   {
     "id": 40,
@@ -1336,9 +1336,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Damage"
     ],
-    "wr": 47.35,
-    "pr": 0.55,
-    "br": 1.65
+    "wr": 46.35,
+    "pr": 0.5,
+    "br": 1.5
   },
   {
     "id": 98,
@@ -1355,7 +1355,7 @@ export const HEROES: Hero[] = [
       "Damage",
       "Regen"
     ],
-    "wr": 52.5,
+    "wr": 52.7,
     "pr": 0.1,
     "br": 0.2
   },
@@ -1373,9 +1373,9 @@ export const HEROES: Hero[] = [
       "Initiator",
       "Crowd Control"
     ],
-    "wr": 54.5,
+    "wr": 54.2,
     "pr": 0.15,
-    "br": 1.1
+    "br": 1
   },
   {
     "id": 71,
@@ -1393,9 +1393,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Magic Damage"
     ],
-    "wr": 47.3,
-    "pr": 0.6,
-    "br": 0.5
+    "wr": 47.25,
+    "pr": 0.55,
+    "br": 0.55
   },
   {
     "id": 47,
@@ -1411,9 +1411,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Burst"
     ],
-    "wr": 43.55,
-    "pr": 0.55,
-    "br": 0.7
+    "wr": 43,
+    "pr": 0.5,
+    "br": 0.85
   },
   {
     "id": 37,
@@ -1429,9 +1429,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Burst"
     ],
-    "wr": 49.35,
-    "pr": 0.4,
-    "br": 1.4
+    "wr": 49.4,
+    "pr": 0.35,
+    "br": 1.15
   },
   {
     "id": 18,
@@ -1447,9 +1447,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Damage"
     ],
-    "wr": 47.1,
-    "pr": 1.45,
-    "br": 1.45
+    "wr": 47.55,
+    "pr": 1.55,
+    "br": 1.8
   },
   {
     "id": 67,
@@ -1465,9 +1465,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Burst"
     ],
-    "wr": 50.6,
-    "pr": 0.35,
-    "br": 1.7
+    "wr": 50.75,
+    "pr": 0.25,
+    "br": 1.4
   },
   {
     "id": 53,
@@ -1484,9 +1484,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Burst"
     ],
-    "wr": 46.65,
-    "pr": 1.95,
-    "br": 18.6
+    "wr": 46.35,
+    "pr": 1.9,
+    "br": 18.35
   },
   {
     "id": 84,
@@ -1502,9 +1502,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Burst"
     ],
-    "wr": 53.5,
-    "pr": 0.7,
-    "br": 2.2
+    "wr": 53,
+    "pr": 0.55,
+    "br": 1.25
   },
   {
     "id": 20,
@@ -1521,7 +1521,7 @@ export const HEROES: Hero[] = [
       "Guard",
       "Crowd Control"
     ],
-    "wr": 55.45,
+    "wr": 55.5,
     "pr": 0.1,
     "br": 0.35
   },
@@ -1540,9 +1540,9 @@ export const HEROES: Hero[] = [
       "Regen",
       "Damage"
     ],
-    "wr": 51.45,
-    "pr": 0.35,
-    "br": 1.1
+    "wr": 51.4,
+    "pr": 0.4,
+    "br": 2.45
   },
   {
     "id": 68,
@@ -1558,8 +1558,8 @@ export const HEROES: Hero[] = [
       "Burst",
       "Damage"
     ],
-    "wr": 49.3,
-    "pr": 0.2,
+    "wr": 49.05,
+    "pr": 0.15,
     "br": 0.25
   },
   {
@@ -1576,7 +1576,7 @@ export const HEROES: Hero[] = [
       "Support",
       "Crowd Control"
     ],
-    "wr": 47.4,
+    "wr": 47.9,
     "pr": 0.2,
     "br": 0.1
   },
@@ -1596,7 +1596,7 @@ export const HEROES: Hero[] = [
     ],
     "wr": 49.8,
     "pr": 0.5,
-    "br": 0.8
+    "br": 0.95
   },
   {
     "id": 132,
@@ -1612,9 +1612,9 @@ export const HEROES: Hero[] = [
       "Crowd Control",
       "Support"
     ],
-    "wr": 59.2,
+    "wr": 58.2,
     "pr": 0.2,
-    "br": 15.7
+    "br": 13.5
   },
   {
     "id": 58,
@@ -1631,9 +1631,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Charge"
     ],
-    "wr": 47.7,
+    "wr": 47.55,
     "pr": 0.6,
-    "br": 0.95
+    "br": 0.85
   },
   {
     "id": 88,
@@ -1650,9 +1650,9 @@ export const HEROES: Hero[] = [
       "Push",
       "Damage"
     ],
-    "wr": 56.25,
+    "wr": 54.6,
     "pr": 0.1,
-    "br": 0.2
+    "br": 0.5
   },
   {
     "id": 102,
@@ -1669,7 +1669,7 @@ export const HEROES: Hero[] = [
       "Initiator",
       "Guard"
     ],
-    "wr": 44.8,
+    "wr": 45.25,
     "pr": 0.1,
     "br": 0.25
   },
@@ -1687,9 +1687,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Damage"
     ],
-    "wr": 54.2,
-    "pr": 1.3,
-    "br": 9.4
+    "wr": 53.7,
+    "pr": 1.35,
+    "br": 13.45
   },
   {
     "id": 19,
@@ -1705,9 +1705,9 @@ export const HEROES: Hero[] = [
     "spec": [
       "Crowd Control"
     ],
-    "wr": 55.1,
+    "wr": 55.5,
     "pr": 0.6,
-    "br": 4.5
+    "br": 5.35
   },
   {
     "id": 74,
@@ -1725,8 +1725,8 @@ export const HEROES: Hero[] = [
       "Crowd Control"
     ],
     "wr": 51.7,
-    "pr": 0.8,
-    "br": 17.7
+    "pr": 0.75,
+    "br": 12.25
   },
   {
     "id": 1,
@@ -1742,9 +1742,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Damage"
     ],
-    "wr": 53.35,
-    "pr": 3.55,
-    "br": 19.65
+    "wr": 53.5,
+    "pr": 3.8,
+    "br": 23.5
   },
   {
     "id": 31,
@@ -1760,9 +1760,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Chase"
     ],
-    "wr": 49,
-    "pr": 0.85,
-    "br": 0.35
+    "wr": 47.85,
+    "pr": 0.8,
+    "br": 0.45
   },
   {
     "id": 5,
@@ -1778,9 +1778,9 @@ export const HEROES: Hero[] = [
       "Poke",
       "Burst"
     ],
-    "wr": 47.1,
-    "pr": 1.8,
-    "br": 5.25
+    "wr": 47.65,
+    "pr": 2.35,
+    "br": 6.65
   },
   {
     "id": 24,
@@ -1797,9 +1797,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Finisher"
     ],
-    "wr": 51.85,
-    "pr": 0.35,
-    "br": 3.65
+    "wr": 51.95,
+    "pr": 0.4,
+    "br": 3.85
   },
   {
     "id": 107,
@@ -1815,8 +1815,8 @@ export const HEROES: Hero[] = [
       "Burst",
       "Magic Damage"
     ],
-    "wr": 50.2,
-    "pr": 0.25,
+    "wr": 49.6,
+    "pr": 0.2,
     "br": 0.2
   },
   {
@@ -1833,9 +1833,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Burst"
     ],
-    "wr": 48.15,
-    "pr": 0.4,
-    "br": 0.95
+    "wr": 47.8,
+    "pr": 0.5,
+    "br": 1.7
   },
   {
     "id": 119,
@@ -1851,9 +1851,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Poke"
     ],
-    "wr": 49.45,
-    "pr": 1.55,
-    "br": 7.75
+    "wr": 49.35,
+    "pr": 1.6,
+    "br": 10.15
   },
   {
     "id": 130,
@@ -1869,9 +1869,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Damage"
     ],
-    "wr": 50.3,
-    "pr": 0.65,
-    "br": 1.5
+    "wr": 50.9,
+    "pr": 0.85,
+    "br": 2.75
   },
   {
     "id": 46,
@@ -1887,7 +1887,7 @@ export const HEROES: Hero[] = [
       "Burst",
       "Poke"
     ],
-    "wr": 49.7,
+    "wr": 49.55,
     "pr": 0.6,
     "br": 0.4
   },
@@ -1906,9 +1906,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Damage"
     ],
-    "wr": 50.9,
+    "wr": 50.85,
     "pr": 1.6,
-    "br": 55.6
+    "br": 49.7
   },
   {
     "id": 52,
@@ -1924,9 +1924,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Poke"
     ],
-    "wr": 46.85,
+    "wr": 47.1,
     "pr": 0.45,
-    "br": 0.3
+    "br": 0.4
   },
   {
     "id": 106,
@@ -1942,9 +1942,9 @@ export const HEROES: Hero[] = [
       "Regen",
       "Damage"
     ],
-    "wr": 48.3,
+    "wr": 47.65,
     "pr": 0.3,
-    "br": 0.8
+    "br": 1.35
   },
   {
     "id": 94,
@@ -1961,9 +1961,9 @@ export const HEROES: Hero[] = [
       "Push",
       "Burst"
     ],
-    "wr": 53,
+    "wr": 53.35,
     "pr": 0.35,
-    "br": 0.3
+    "br": 0.35
   },
   {
     "id": 14,
@@ -1979,9 +1979,9 @@ export const HEROES: Hero[] = [
       "Regen",
       "Guard"
     ],
-    "wr": 58,
-    "pr": 0.85,
-    "br": 11
+    "wr": 58.45,
+    "pr": 0.95,
+    "br": 12.7
   },
   {
     "id": 39,
@@ -1998,7 +1998,7 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Burst"
     ],
-    "wr": 50.05,
+    "wr": 50.75,
     "pr": 0.35,
     "br": 0.15
   },
@@ -2016,9 +2016,9 @@ export const HEROES: Hero[] = [
       "Crowd Control",
       "Regen"
     ],
-    "wr": 49.45,
-    "pr": 0.35,
-    "br": 0.8
+    "wr": 49.3,
+    "pr": 0.3,
+    "br": 0.75
   },
   {
     "id": 3,
@@ -2036,8 +2036,8 @@ export const HEROES: Hero[] = [
       "Finisher"
     ],
     "wr": 50.05,
-    "pr": 1.1,
-    "br": 39.95
+    "pr": 1.2,
+    "br": 43.1
   },
   {
     "id": 63,
@@ -2055,9 +2055,9 @@ export const HEROES: Hero[] = [
       "Initiator",
       "Finisher"
     ],
-    "wr": 48.6,
+    "wr": 48.8,
     "pr": 1.25,
-    "br": 6.35
+    "br": 6.75
   },
   {
     "id": 90,
@@ -2073,9 +2073,9 @@ export const HEROES: Hero[] = [
       "Initiator",
       "Magic Damage"
     ],
-    "wr": 51.85,
-    "pr": 1.45,
-    "br": 3.8
+    "wr": 52.2,
+    "pr": 1.5,
+    "br": 4.4
   },
   {
     "id": 131,
@@ -2092,9 +2092,9 @@ export const HEROES: Hero[] = [
       "Charge",
       "Burst"
     ],
-    "wr": 49.4,
-    "pr": 0.55,
-    "br": 7.45
+    "wr": 49.1,
+    "pr": 0.45,
+    "br": 6.8
   },
   {
     "id": 27,
@@ -2111,9 +2111,9 @@ export const HEROES: Hero[] = [
       "Push",
       "Damage"
     ],
-    "wr": 54.05,
+    "wr": 54.35,
     "pr": 1.7,
-    "br": 47.2
+    "br": 41.65
   },
   {
     "id": 126,
@@ -2130,9 +2130,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Burst"
     ],
-    "wr": 49.85,
+    "wr": 50.15,
     "pr": 0.75,
-    "br": 1.95
+    "br": 2
   },
   {
     "id": 82,
@@ -2149,9 +2149,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Crowd Control"
     ],
-    "wr": 51.1,
+    "wr": 51.4,
     "pr": 0.4,
-    "br": 0.35
+    "br": 0.4
   },
   {
     "id": 72,
@@ -2167,9 +2167,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Damage"
     ],
-    "wr": 49.75,
-    "pr": 1,
-    "br": 3
+    "wr": 49.9,
+    "pr": 1.1,
+    "br": 3.75
   },
   {
     "id": 6,
@@ -2184,9 +2184,9 @@ export const HEROES: Hero[] = [
     "spec": [
       "Crowd Control"
     ],
-    "wr": 45.8,
+    "wr": 45.85,
     "pr": 2.4,
-    "br": 12.75
+    "br": 12.7
   },
   {
     "id": 59,
@@ -2201,7 +2201,7 @@ export const HEROES: Hero[] = [
     "spec": [
       "Regen"
     ],
-    "wr": 50.85,
+    "wr": 50.9,
     "pr": 0.4,
     "br": 0.8
   },
@@ -2219,7 +2219,7 @@ export const HEROES: Hero[] = [
       "Burst",
       "Crowd Control"
     ],
-    "wr": 50.85,
+    "wr": 50.8,
     "pr": 0.75,
     "br": 0.4
   },
@@ -2237,7 +2237,7 @@ export const HEROES: Hero[] = [
       "Burst",
       "Finisher"
     ],
-    "wr": 42.9,
+    "wr": 42.75,
     "pr": 0.1,
     "br": 0.1
   },
@@ -2255,9 +2255,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Guard"
     ],
-    "wr": 52.85,
-    "pr": 1,
-    "br": 3
+    "wr": 53,
+    "pr": 0.95,
+    "br": 3.15
   },
   {
     "id": 38,
@@ -2273,9 +2273,9 @@ export const HEROES: Hero[] = [
       "Poke",
       "Control"
     ],
-    "wr": 50.35,
-    "pr": 2,
-    "br": 2.35
+    "wr": 50.45,
+    "pr": 2.05,
+    "br": 2.7
   },
   {
     "id": 89,
@@ -2291,8 +2291,8 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Burst"
     ],
-    "wr": 47.15,
-    "pr": 0.15,
+    "wr": 46.15,
+    "pr": 0.1,
     "br": 0.25
   },
   {
@@ -2309,9 +2309,9 @@ export const HEROES: Hero[] = [
       "Regen",
       "Burst"
     ],
-    "wr": 50.55,
+    "wr": 50.9,
     "pr": 0.7,
-    "br": 5
+    "br": 5.1
   },
   {
     "id": 115,
@@ -2327,9 +2327,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Burst"
     ],
-    "wr": 48.2,
-    "pr": 0.6,
-    "br": 0.25
+    "wr": 48.15,
+    "pr": 0.55,
+    "br": 0.3
   },
   {
     "id": 30,
@@ -2346,9 +2346,9 @@ export const HEROES: Hero[] = [
       "Finisher",
       "Chase"
     ],
-    "wr": 51.6,
-    "pr": 1.3,
-    "br": 11.25
+    "wr": 51.9,
+    "pr": 1.25,
+    "br": 10.65
   },
   {
     "id": 113,
@@ -2366,9 +2366,9 @@ export const HEROES: Hero[] = [
       "Burst",
       "Control"
     ],
-    "wr": 48.55,
-    "pr": 0.7,
-    "br": 2.8
+    "wr": 48.85,
+    "pr": 0.75,
+    "br": 3.4
   },
   {
     "id": 95,
@@ -2384,9 +2384,9 @@ export const HEROES: Hero[] = [
       "Regen",
       "Damage"
     ],
-    "wr": 49.2,
-    "pr": 0.65,
-    "br": 2.25
+    "wr": 49,
+    "pr": 0.6,
+    "br": 2.1
   },
   {
     "id": 101,
@@ -2402,7 +2402,7 @@ export const HEROES: Hero[] = [
       "Poke",
       "Burst"
     ],
-    "wr": 50.4,
+    "wr": 50.7,
     "pr": 0,
     "br": 0.1
   },
@@ -2420,9 +2420,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Crowd Control"
     ],
-    "wr": 51.65,
-    "pr": 1.45,
-    "br": 11.7
+    "wr": 51.6,
+    "pr": 1.3,
+    "br": 9.65
   },
   {
     "id": 50,
@@ -2438,9 +2438,9 @@ export const HEROES: Hero[] = [
       "Chase",
       "Damage"
     ],
-    "wr": 52.4,
-    "pr": 0.45,
-    "br": 0.75
+    "wr": 52.85,
+    "pr": 0.4,
+    "br": 0.85
   },
   {
     "id": 125,
@@ -2456,9 +2456,9 @@ export const HEROES: Hero[] = [
       "Damage",
       "Crowd Control"
     ],
-    "wr": 47.2,
+    "wr": 47.5,
     "pr": 0.1,
-    "br": 0.7
+    "br": 0.5
   },
   {
     "id": 16,
@@ -2475,8 +2475,8 @@ export const HEROES: Hero[] = [
       "Chase",
       "Damage"
     ],
-    "wr": 46.6,
-    "pr": 0.9,
-    "br": 0.55
+    "wr": 46.5,
+    "pr": 1,
+    "br": 0.8
   }
 ];

@@ -1,8 +1,18 @@
 # Counter Ready
 
-> A fast, bilingual Mobile Legends: Bang Bang draft assistant that scores counters against the enemy lineup and synergy with your own team, powered by a local Mythic+ statistics snapshot.
+**[Play it now / 在线使用](https://guigulaoshi.github.io/counter-ready-mlbb/)** — runs in the browser, nothing to install / 打开网页即可使用，无需安装。
 
-一个快速、中英双语的 Mobile Legends: Bang Bang 选英雄工具：同时计算对敌方的克制关系和与队友的配合关系，使用本地神话+统计快照。
+> A fast, bilingual Mobile Legends: Bang Bang (国服《决胜巅峰》) draft assistant that scores counters against the enemy lineup and synergy with your own team, powered by a local Mythic+ statistics snapshot.
+
+一个快速、中英双语的《决胜巅峰》（Mobile Legends: Bang Bang）选英雄工具：同时计算对敌方的克制关系和与队友的配合关系，使用本地神话+统计快照。
+
+## Play / 在线使用
+
+<https://guigulaoshi.github.io/counter-ready-mlbb/>
+
+The site is static and works on desktop and phone browsers. No install, no account.
+
+网页版为静态页面，电脑和手机浏览器都能直接打开，无需安装、无需账户。
 
 ## Features / 功能
 
@@ -31,9 +41,9 @@ Counter edges are signed: the reverse direction (the enemy countering your pick)
 ## Data / 数据
 
 - Patch 2.1.90 · Season 41
-- Snapshot / 快照：2026-09-03
+- Snapshot / 快照：2026-09-20
 - 133 heroes / 133 位英雄
-- 6,239 counter edges and 989 synergy pairs / 6,239 条克制关系和 989 对配合关系
+- 6,483 counter edges and 1,001 synergy pairs / 6,483 条克制关系和 1,001 对配合关系
 - Win, pick and ban rates are the 7-day average across Mythic and Mythical Honor / 胜率、选取率、禁用率为神话、神话荣耀近 7 日平均值
 - Counter edges come from the mlbb.tools JSON API; synergy edges are read from each hero's "Best With" block / 克制数据来自 mlbb.tools 的 JSON 接口，配合数据来自英雄页的 "Best With" 区块
 - Mythical Glory is excluded: its samples are thin enough that pair edges reach 40–65pp against a median of ~3pp / 已排除神话荣光：该段位样本过薄，对位数值能飙到 40–65pp，而中位数只有约 3pp
@@ -66,6 +76,6 @@ npm test
 
 ## License
 
-MIT. Mobile Legends: Bang Bang and its hero artwork belong to their respective rights holders. This fan-made project is not affiliated with or endorsed by Moonton.
+MIT. Mobile Legends: Bang Bang (国服《决胜巅峰》) and its hero artwork belong to their respective rights holders. This fan-made project is not affiliated with or endorsed by Moonton.
 
 MIT 开源。本项目为非官方玩家工具，与 Moonton 无隶属或背书关系。

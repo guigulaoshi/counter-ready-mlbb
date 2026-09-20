@@ -43,8 +43,11 @@ test("keeps the selected enemy's counter direction explicit", () => {
 
   assert.equal(getMatchupEdge(candidate, enemy), edge);
   assert.equal(getMatchupEdge(enemy, candidate), -edge);
-  assert.equal(getMatchupEdge("Sun", "Masha"), 5.165);
-  assert.equal(getMatchupEdge("Masha", "Sun"), -5.165);
+  // Read the pair from the table so a data refresh does not break the test
+  const sunVsMasha = COUNTERS_BY_ENEMY["Masha"]?.["Sun"];
+  assert.ok(sunVsMasha && sunVsMasha > 0, "Sun should still be a measured counter to Masha");
+  assert.equal(getMatchupEdge("Sun", "Masha"), sunVsMasha);
+  assert.equal(getMatchupEdge("Masha", "Sun"), -sunVsMasha);
 });
 
 test("ships a symmetric synergy table alongside the counters", () => {
