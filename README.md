@@ -40,7 +40,7 @@ Counter edges are signed: the reverse direction (the enemy countering your pick)
 
 ## Data / 数据
 
-- Patch 2.1.90 · Season 41
+- Patch 2.1.88 · Season 41
 - Snapshot / 快照：2026-09-20
 - 133 heroes / 133 位英雄
 - 6,483 counter edges and 1,001 synergy pairs / 6,483 条克制关系和 1,001 对配合关系

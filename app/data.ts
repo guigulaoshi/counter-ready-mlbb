@@ -11,7 +11,7 @@ export type Hero = {
 };
 
 export const DATA_META = {
-  patch: "2.1.90",
+  patch: "2.1.88",
   season: "S41",
   snapshot: "2026-09-20",
   rank: "Mythic+",
