@@ -21,7 +21,7 @@ test("renders the finished counter picker", async () => {
   assert.match(html, /Mobile Legends/);
   assert.match(html, /Bang Bang/);
   assert.match(html, /非官方 · 神话\+选人助手/);
-  assert.match(html, /PATCH[\s\S]{0,30}2\.1\.\d+/);
+  assert.match(html, /PATCH[\s\S]{0,30}\d+\.\d+\.\d+/);
   assert.match(html, /敌方选了谁/);
   assert.match(html, /敌方阵容/);
   assert.match(html, /先填敌方阵容/);
@@ -41,7 +41,7 @@ test("ships complete local hero data and social preview", async () => {
     readFile(new URL("../pages-dist/index.html", import.meta.url), "utf8"),
   ]);
   assert.equal((data.match(/"id":/g) ?? []).length, 133);
-  assert.match(data, /patch: "2\.1\.\d+"/);
+  assert.match(data, /patch: "\d+\.\d+\.\d+"/);
   assert.match(data, /snapshot: "\d{4}-\d{2}-\d{2}"/);
   assert.match(data, /rank: "Mythic\+"/);
   assert.match(data, /timeframe: "近 7 日"/);

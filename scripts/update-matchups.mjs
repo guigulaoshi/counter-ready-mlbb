@@ -11,8 +11,8 @@ const RANK_TIERS = ["mythic", "honor"];
 // tables at the ceiling the server-filtered counter data actually reaches, so one
 // noisy pair cannot dominate a recommendation.
 const MAX_EDGE_PP = 15;
-const CONCURRENCY = 6;
-const MAX_ATTEMPTS = 4;
+const CONCURRENCY = 4;
+const MAX_ATTEMPTS = 6;
 const RETRY_DELAY_MS = 750;
 
 const dataUrl = new URL("../app/data.ts", import.meta.url);
@@ -30,6 +30,62 @@ const heroNameSet = new Set(heroNames);
 if (heroNames.length < 100 || heroNameSet.size !== heroNames.length) {
   throw new Error(`Unexpected hero roster: ${heroNames.length} rows, ${heroNameSet.size} unique names`);
 }
+
+/**
+ * Roles, lanes, specialties and portraits come from the official Moonton hero list, which
+ * is updated with each patch (lane tags get reshuffled when heroes are reworked or rebalanced).
+ */
+const OFFICIAL_HERO_API = "https://api.gms.moontontech.com/api/gms/source/2669606/2756564";
+const OFFICIAL_LANES = { Jungling: "Jungle", Roaming: "Roam" };
+
+async function syncOfficialMetadata() {
+  const records = await withRetry("official hero list", async () => {
+    const response = await fetch(OFFICIAL_HERO_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-lang": "en" },
+      body: JSON.stringify({
+        pageSize: 200,
+        pageIndex: 1,
+        filters: [],
+        sorts: [{ data: { field: "hero_id", order: "desc" }, type: "sequence" }],
+        object: [],
+      }),
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    if (!Array.isArray(payload.data?.records)) throw new Error("Missing hero records");
+    return payload.data.records;
+  });
+
+  const official = new Map(records.map((record) => [record.data.hero.data.heroid, record.data.hero.data]));
+  const missing = heroes.filter((hero) => !official.has(hero.id)).map((hero) => hero.name);
+  if (missing.length > 0) throw new Error(`Official hero list is missing: ${missing.join(", ")}`);
+  const unknown = [...official.values()].filter((row) => !heroes.some((hero) => hero.id === row.heroid));
+  if (unknown.length > 0) {
+    console.warn(`Official list has heroes not in app/data.ts: ${unknown.map((row) => row.name).join(", ")}`);
+  }
+
+  const changes = [];
+  for (const hero of heroes) {
+    const row = official.get(hero.id);
+    if (row.name !== hero.name) throw new Error(`Hero ${hero.id} is ${row.name} officially, ${hero.name} locally`);
+    const next = {
+      img: row.head,
+      role: row.sortlabel.filter(Boolean),
+      lane: row.roadsortlabel.filter(Boolean).map((lane) => OFFICIAL_LANES[lane] ?? lane),
+      spec: row.speciality.filter(Boolean),
+    };
+    for (const [key, value] of Object.entries(next)) {
+      if (JSON.stringify(value) === JSON.stringify(hero[key])) continue;
+      if (key !== "img") changes.push(`${hero.name} ${key}: ${hero[key].join("/")} -> ${value.join("/")}`);
+      hero[key] = value;
+    }
+  }
+  return changes;
+}
+
+const metadataChanges = await syncOfficialMetadata();
+for (const change of metadataChanges) console.log(change);
 
 function slugify(name) {
   return name
@@ -313,5 +369,6 @@ const counterEdges = Object.values(sortedCounters).reduce((sum, edges) => sum + 
 const synergyEdges = Object.values(sortedSynergy).reduce((sum, edges) => sum + Object.keys(edges).length, 0);
 console.log(
   `Wrote ${heroNames.length} heroes, ${counterEdges} counter edges, ${synergyEdges} synergy edges ` +
-    `(${synergyEdges / 2} unique pairs), and refreshed ${statUpdates} hero stat values for ${snapshot}.`,
+    `(${synergyEdges / 2} unique pairs), refreshed ${statUpdates} hero stat values and ` +
+    `${metadataChanges.length} official role/lane/specialty tags for ${snapshot}.`,
 );

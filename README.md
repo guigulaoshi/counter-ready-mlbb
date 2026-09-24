@@ -40,18 +40,18 @@ Counter edges are signed: the reverse direction (the enemy countering your pick)
 
 ## Data / 数据
 
-- Patch 2.1.88 · Season 41
-- Snapshot / 快照：2026-09-20
+- Patch 2.2.16 · Season 42
+- Snapshot / 快照：2026-09-24
 - 133 heroes / 133 位英雄
-- 6,483 counter edges and 1,001 synergy pairs / 6,483 条克制关系和 1,001 对配合关系
+- 6,899 counter edges and 944 synergy pairs / 6,899 条克制关系和 944 对配合关系
 - Win, pick and ban rates are the 7-day average across Mythic and Mythical Honor / 胜率、选取率、禁用率为神话、神话荣耀近 7 日平均值
 - Counter edges come from the mlbb.tools JSON API; synergy edges are read from each hero's "Best With" block / 克制数据来自 mlbb.tools 的 JSON 接口，配合数据来自英雄页的 "Best With" 区块
 - Mythical Glory is excluded: its samples are thin enough that pair edges reach 40–65pp against a median of ~3pp / 已排除神话荣光：该段位样本过薄，对位数值能飙到 40–65pp，而中位数只有约 3pp
 - Every edge is clipped at 15pp so one thin sample cannot dominate a recommendation / 所有数值上限截断在 15pp，避免单个小样本对位主导推荐结果
 
-This is a static snapshot and does not update automatically. Run `npm run data:update-matchups` and update the displayed patch metadata after a game patch. The script rewrites `app/matchups.generated.ts` and refreshes the win, pick and ban rates in `app/data.ts`; it warns when any edge hits the clipping ceiling.
+This is a static snapshot and does not update automatically. Run `npm run data:update-matchups` and update the displayed patch metadata after a game patch. The script rewrites `app/matchups.generated.ts`, refreshes the win, pick and ban rates in `app/data.ts`, and syncs each hero's role, lane and specialty tags from the official Moonton hero list; it warns when any edge hits the clipping ceiling. mlbb.tools' own patch label can lag the live game, so set the patch in `DATA_META` from the official patch notes.
 
-这是静态快照，不会自动更新。游戏换版本后，运行 `npm run data:update-matchups`，并同步更新页面版本信息。脚本会重写 `app/matchups.generated.ts`，并刷新 `app/data.ts` 里的胜率、选取率和禁用率；有数值触及截断上限时会给出告警。
+这是静态快照，不会自动更新。游戏换版本后，运行 `npm run data:update-matchups`，并同步更新页面版本信息。脚本会重写 `app/matchups.generated.ts`，刷新 `app/data.ts` 里的胜率、选取率和禁用率，并从官方英雄列表同步每位英雄的定位、分路和特长标签；mlbb.tools 自己标注的版本号可能落后于游戏实际版本，`DATA_META` 里的版本请以官方更新公告为准；有数值触及截断上限时会给出告警。
 
 ## Local development / 本地运行
 
