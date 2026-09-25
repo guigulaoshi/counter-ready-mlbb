@@ -1,10 +1,44 @@
-# Counter Ready
+<div align="center">
 
-**[Play it now / 在线使用](https://guigulaoshi.github.io/counter-ready-mlbb/)** — runs in the browser, nothing to install / 打开网页即可使用，无需安装。
+# Counter Ready · 决胜巅峰克制助手
+
+**Know the enemy lineup, pick the right hero.** A bilingual Mobile Legends: Bang Bang draft assistant that scores counters and teammate synergy together.<br>
+**看清敌我，选对英雄。** 中英双语的《决胜巅峰》选英雄工具，同时计算克制关系和队友配合。
+
+<a href="https://guigulaoshi.github.io/counter-ready-mlbb/"><img src="https://img.shields.io/badge/%E2%96%B6%20Open%20in%20your%20browser-%E5%9C%A8%E7%BA%BF%E4%BD%BF%E7%94%A8-f5c542?style=for-the-badge" alt="Open in your browser · 在线使用" height="44"></a>
+
+**[▶ Play it now / 在线使用](https://guigulaoshi.github.io/counter-ready-mlbb/)** — runs in the browser, nothing to install / 打开网页即可使用，无需安装。
+
+<a href="https://guigulaoshi.github.io/counter-ready-mlbb/"><img src="docs/readme/hero.webp" alt="Counter Ready on desktop: three enemies and two teammates picked, Baxia ranked as the best jungle pick" width="100%"></a>
+
+</div>
 
 > A fast, bilingual Mobile Legends: Bang Bang (国服《决胜巅峰》) draft assistant that scores counters against the enemy lineup and synergy with your own team, powered by a local Mythic+ statistics snapshot.
 
 一个快速、中英双语的《决胜巅峰》（Mobile Legends: Bang Bang）选英雄工具：同时计算对敌方的克制关系和与队友的配合关系，使用本地神话+统计快照。
+
+## Screenshots / 截图
+
+<table>
+  <tr>
+    <td width="33%"><img src="docs/readme/phone-home.webp" alt="Phone: home screen in Chinese"></td>
+    <td width="33%"><img src="docs/readme/phone-draft.webp" alt="Phone: picking the enemy lineup and your teammates"></td>
+    <td width="33%"><img src="docs/readme/phone-best-pick.webp" alt="Phone: best pick card with the reasons behind the score"></td>
+  </tr>
+  <tr>
+    <td align="center">Phone, 中文 / 手机首页</td>
+    <td align="center">Enemy + ally picks / 选敌方和队友</td>
+    <td align="center">Best pick and why / 最佳选择和理由</td>
+  </tr>
+  <tr>
+    <td colspan="3"><img src="docs/readme/desktop-results-zh.webp" alt="Desktop in Chinese: hero grid, lane picker and the ranked alternatives" width="100%"></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center">Desktop, 中文: lane picker and ranked alternatives / 电脑版：分路选择与备选英雄排名</td>
+  </tr>
+</table>
+
+<sub>Screenshots taken from the live site. / 截图均取自线上网页。</sub>
 
 ## Play / 在线使用
 
@@ -79,3 +113,7 @@ npm test
 MIT. Mobile Legends: Bang Bang (国服《决胜巅峰》) and its hero artwork belong to their respective rights holders. This fan-made project is not affiliated with or endorsed by Moonton.
 
 MIT 开源。本项目为非官方玩家工具，与 Moonton 无隶属或背书关系。
+
+## Made by / 作者
+
+guigulaoshi · [itch.io](https://guigulaoshi.itch.io) · [GitHub](https://github.com/guigulaoshi) · [YouTube](https://www.youtube.com/@guigulaoshi) · [X](https://x.com/guigulaoshi) · [TikTok](https://www.tiktok.com/@guigulaoshi) · [抖音](https://www.douyin.com/user/MS4wLjABAAAAmWbEAlX8SvUu3RUFu48ArUSOqK9-2cTOC78Byiqe0GY) · [哔哩哔哩](https://space.bilibili.com/3546730639395688) · [小红书](https://www.xiaohongshu.com/user/profile/6090be480000000001005d88)
