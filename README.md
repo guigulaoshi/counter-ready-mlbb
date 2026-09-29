@@ -75,9 +75,9 @@ Counter edges are signed: the reverse direction (the enemy countering your pick)
 ## Data / 数据
 
 - Patch 2.2.16 · Season 42
-- Snapshot / 快照：2026-09-24
+- Snapshot / 快照：2026-09-29
 - 133 heroes / 133 位英雄
-- 6,899 counter edges and 944 synergy pairs / 6,899 条克制关系和 944 对配合关系
+- 7,082 counter edges and 973 synergy pairs / 7,082 条克制关系和 973 对配合关系
 - Win, pick and ban rates are the 7-day average across Mythic and Mythical Honor / 胜率、选取率、禁用率为神话、神话荣耀近 7 日平均值
 - Counter edges come from the mlbb.tools JSON API; synergy edges are read from each hero's "Best With" block / 克制数据来自 mlbb.tools 的 JSON 接口，配合数据来自英雄页的 "Best With" 区块
 - Mythical Glory is excluded: its samples are thin enough that pair edges reach 40–65pp against a median of ~3pp / 已排除神话荣光：该段位样本过薄，对位数值能飙到 40–65pp，而中位数只有约 3pp
