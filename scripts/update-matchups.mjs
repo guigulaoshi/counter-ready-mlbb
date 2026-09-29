@@ -1,11 +1,14 @@
 import { readFile, writeFile } from "node:fs/promises";
+import { STATS_URL, parseHeroStatistics } from "./hero-statistics.mjs";
+import { isFreshCounter } from "./counter-records.mjs";
 
 const API_BASE = "https://mlbb.tools/api/counter";
 const PAGE_BASE = "https://mlbb.tools/heroes";
-// Mythical Glory is deliberately excluded: its sample sizes are small enough that
-// pair edges reach 40-65pp, an order of magnitude above the Mythic and Honor tiers,
-// which agree closely with each other (p99 ~7pp and ~9pp).
-const RANK_TIERS = ["mythic", "honor"];
+const RANK_TIERS = ["mythic"];
+const fetchedAt = new Date().toISOString();
+const fetchTime = Date.parse(fetchedAt);
+let excludedCounterRows = 0;
+const counterSourceDates = [];
 // Rare heroes get thin pair samples, so a handful of edges land far outside the
 // distribution (synergy reached 50pp while its median is 4.6pp). Winsorize both
 // tables at the ceiling the server-filtered counter data actually reaches, so one
@@ -87,6 +90,12 @@ async function syncOfficialMetadata() {
 const metadataChanges = await syncOfficialMetadata();
 for (const change of metadataChanges) console.log(change);
 
+const heroStatistics = await withRetry("Mythic seven-day statistics", async () => {
+  const response = await fetch(STATS_URL, { signal: AbortSignal.timeout(30_000) });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return parseHeroStatistics(await response.json(), heroes);
+});
+
 function slugify(name) {
   return name
     .normalize("NFKD")
@@ -131,10 +140,15 @@ async function fetchCounters(heroName, slug, rankTier) {
 
     const counters = new Map();
     for (const row of payload.counters) {
+      if (!isFreshCounter(row, fetchTime)) {
+        excludedCounterRows += 1;
+        continue;
+      }
       const candidate = row.hero_a?.name;
       const edge = Number(row.increase_win_rate) * 100;
       if (!heroNameSet.has(candidate) || !Number.isFinite(edge) || edge <= 0) continue;
       counters.set(candidate, edge);
+      counterSourceDates.push(row.updated_at);
     }
     return counters;
   });
@@ -180,16 +194,6 @@ async function fetchHeroPage(heroName, slug, rankTier) {
 
     const text = resolveFlightRefs(flightPayload(await response.text()));
 
-    const readStat = (label) => {
-      const start = text.indexOf(`"div","${label}",{`);
-      if (start < 0) return null;
-      const match = text.slice(start, start + 1500).match(/"children":"(\d+(?:\.\d+)?)%"/);
-      return match ? Number(match[1]) : null;
-    };
-
-    const stats = { wr: readStat("Win Rate"), pr: readStat("Pick Rate"), br: readStat("Ban Rate") };
-    if (stats.wr === null) throw new Error("Missing win rate");
-
     const start = text.indexOf('"children":"Best With"');
     if (start < 0) throw new Error("Missing Best With block");
     const block = text.slice(start, start + 20_000);
@@ -203,13 +207,12 @@ async function fetchHeroPage(heroName, slug, rankTier) {
       synergies.set(partner, edge);
     }
 
-    return { stats, synergies };
+    return { synergies };
   });
 }
 
 const counterSamples = new Map();
 const synergySamples = new Map();
-const statSamples = new Map(heroNames.map((name) => [name, { wr: [], pr: [], br: [] }]));
 
 function pushSample(store, key, value) {
   const bucket = store.get(key);
@@ -243,10 +246,6 @@ async function worker() {
     for (const [partner, edge] of page.synergies) {
       const pair = name < partner ? `${name}\t${partner}` : `${partner}\t${name}`;
       pushSample(synergySamples, pair, edge);
-    }
-    const stats = statSamples.get(name);
-    for (const key of ["wr", "pr", "br"]) {
-      if (page.stats[key] !== null) stats[key].push(page.stats[key]);
     }
 
     done += 1;
@@ -298,15 +297,17 @@ const sortedSynergy = sortDesc(synergyByHero);
 
 const emptyCounters = heroNames.filter((name) => Object.keys(sortedCounters[name]).length === 0);
 if (emptyCounters.length > 0) {
-  throw new Error(`No counter edges for: ${emptyCounters.join(", ")}`);
+  console.warn(`No fresh counter edges for: ${emptyCounters.join(", ")}; leaving these empty.`);
 }
+if (counterSourceDates.length === 0) throw new Error("No fresh Mythic seven-day counter records returned");
 
 if (clipped > 0) {
   console.warn(`Clipped ${clipped} edges to the ${MAX_EDGE_PP}pp ceiling.`);
 }
 
 const generatedAt = new Date().toISOString();
-const snapshot = generatedAt.slice(0, 10);
+const snapshot = heroStatistics.updatedAt.slice(0, 10);
+counterSourceDates.sort();
 const tierList = RANK_TIERS.map((tier) => `"${tier}"`).join(", ");
 const serialize = (table) =>
   Object.entries(table)
@@ -314,10 +315,11 @@ const serialize = (table) =>
     .join("\n");
 
 const output = `/**
- * Generated Mythic+ matchup and synergy snapshot.
+ * Generated Mythic matchup and synergy snapshot.
  * Sources: ${API_BASE}?heroSlug=<slug>&rankTier=<tier>
  *          ${PAGE_BASE}/<slug>?tier=<tier> ("Best With" block)
- * Tiers averaged: ${RANK_TIERS.join(", ")}
+ * Rank: Mythic only. Counters must have time_window=7d and an update within 7 days.
+ * Synergy source does not expose a statistical window or source timestamp.
  * Generated: ${generatedAt}
  *
  * COUNTERS_BY_ENEMY: outer key = enemy hero; nested key = candidate that beats them.
@@ -330,6 +332,13 @@ const output = `/**
 export const MATCHUP_META = {
   rankTiers: [${tierList}] as const,
   generatedAt: "${generatedAt}",
+  freshnessCheckedAt: "${fetchedAt}",
+  counterTimeWindow: "7d",
+  counterSourceOldest: "${counterSourceDates[0]}",
+  counterSourceNewest: "${counterSourceDates.at(-1)}",
+  excludedCounterRows: ${excludedCounterRows},
+  synergyTimeWindow: null,
+  synergySourceUpdatedAt: null,
   heroCount: ${heroNames.length},
 } as const;
 
@@ -344,13 +353,12 @@ ${serialize(sortedSynergy)}
 
 await writeFile(new URL("../app/matchups.generated.ts", import.meta.url), output);
 
-const roundStat = (values) => (values.length > 0 ? Number(mean(values).toFixed(2)) : null);
 let statUpdates = 0;
 for (const hero of heroes) {
-  const stats = statSamples.get(hero.name);
+  const stats = heroStatistics.stats.get(hero.name);
   for (const key of ["wr", "pr", "br"]) {
-    const value = roundStat(stats[key]);
-    if (value !== null && value !== hero[key]) {
+    const value = stats[key];
+    if (value !== hero[key]) {
       hero[key] = value;
       statUpdates += 1;
     }
@@ -359,11 +367,14 @@ for (const hero of heroes) {
 
 const nextData = dataSource
   .replace(/snapshot: "[^"]*"/, `snapshot: "${snapshot}"`)
+  .replace(/sourceUpdatedAt: "[^"]*"/, `sourceUpdatedAt: "${heroStatistics.updatedAt}"`)
+  .replace(/fetchedAt: "[^"]*"/, `fetchedAt: "${generatedAt}"`)
   .replace(
     /export const HEROES: Hero\[\] = [\s\S]*;\n$/,
     `export const HEROES: Hero[] = ${JSON.stringify(heroes, null, 2)};\n`,
   );
 await writeFile(dataUrl, nextData);
+console.log(`Excluded ${excludedCounterRows} stale, undated or wrong-scope counter records.`);
 
 const counterEdges = Object.values(sortedCounters).reduce((sum, edges) => sum + Object.keys(edges).length, 0);
 const synergyEdges = Object.values(sortedSynergy).reduce((sum, edges) => sum + Object.keys(edges).length, 0);

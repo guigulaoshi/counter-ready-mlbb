@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { HEROES } from "../app/data.ts";
+import { DATA_META, HEROES } from "../app/data.ts";
 import {
   COUNTERS_BY_ENEMY,
   MATCHUP_META,
@@ -11,20 +11,28 @@ import {
 
 const MAX_EDGE_PP = 15;
 
-test("ships a Mythic+ matchup table for every local hero", () => {
+test("ships only Mythic data and preserves gaps after removing stale records", () => {
   const heroNames = new Set(HEROES.map((hero) => hero.name));
   const enemyNames = Object.keys(COUNTERS_BY_ENEMY);
   const edgeCount = Object.values(COUNTERS_BY_ENEMY)
     .reduce((sum, counters) => sum + Object.keys(counters).length, 0);
 
-  assert.deepEqual([...MATCHUP_META.rankTiers], ["mythic", "honor"]);
+  assert.deepEqual([...MATCHUP_META.rankTiers], ["mythic"]);
+  assert.equal(DATA_META.rankId, 4);
+  assert.equal(DATA_META.timeframeId, 3);
+  assert.equal(DATA_META.snapshot, DATA_META.sourceUpdatedAt.slice(0, 10));
+  assert.equal(MATCHUP_META.counterTimeWindow, "7d");
+  const checkedAt = Date.parse(MATCHUP_META.freshnessCheckedAt);
+  assert.ok(checkedAt - Date.parse(MATCHUP_META.counterSourceOldest) <= 7 * 86_400_000);
+  assert.ok(Date.parse(MATCHUP_META.counterSourceNewest) <= checkedAt);
+  assert.equal(MATCHUP_META.synergyTimeWindow, null);
+  assert.equal(MATCHUP_META.synergySourceUpdatedAt, null);
   assert.equal(MATCHUP_META.heroCount, HEROES.length);
   assert.equal(enemyNames.length, HEROES.length);
   assert.deepEqual(new Set(enemyNames), heroNames);
-  assert.ok(edgeCount > 4_000, `expected a complete matchup snapshot, received ${edgeCount} edges`);
+  assert.ok(edgeCount > 0, "must have some verified fresh matchup records");
 
   for (const [enemy, counters] of Object.entries(COUNTERS_BY_ENEMY)) {
-    assert.ok(Object.keys(counters).length > 0, `${enemy} has no counters`);
     for (const [candidate, edge] of Object.entries(counters)) {
       assert.ok(heroNames.has(candidate), `${candidate} is not in the local hero roster`);
       assert.ok(edge > 0, `${candidate} vs ${enemy} must be a positive directional edge`);
@@ -77,7 +85,7 @@ test("X.Borg has measured counters available in every lane", () => {
   const counters = COUNTERS_BY_ENEMY["X.Borg"];
 
   assert.ok(counters);
-  assert.ok(Object.keys(counters).length >= 40);
+  assert.ok(Object.keys(counters).length > 0);
   for (const lane of lanes) {
     const laneCounters = HEROES.filter((hero) => hero.lane.includes(lane) && counters[hero.name] > 0);
     assert.ok(laneCounters.length > 0, `X.Borg should have a ${lane} counter`);

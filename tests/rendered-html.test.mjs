@@ -20,7 +20,7 @@ test("renders the finished counter picker", async () => {
   assert.match(html, /<title>Mobile Legends Counter Picker/);
   assert.match(html, /Mobile Legends/);
   assert.match(html, /Bang Bang/);
-  assert.match(html, /非官方 · 神话\+选人助手/);
+  assert.match(html, /非官方 · 神话选人助手/);
   assert.match(html, /PATCH[\s\S]{0,30}\d+\.\d+\.\d+/);
   assert.match(html, /敌方选了谁/);
   assert.match(html, /敌方阵容/);
@@ -29,7 +29,11 @@ test("renders the finished counter picker", async () => {
   assert.match(html, /暂无同路实测关系数据/);
   assert.match(html, /队友已经选了谁/);
   assert.match(html, /我方队友/);
-  assert.match(html, /Mythic\+/);
+  assert.match(html, /Mythic/);
+  assert.match(html, /最近 7 天/);
+  assert.match(html, /胜率更新/);
+  assert.match(html, /配合数据日期未公开/);
+  assert.doesNotMatch(html, /MYTHIC\+|Mythic\+|神话\+/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview|SkeletonPreview/);
 });
 
@@ -43,7 +47,7 @@ test("ships complete local hero data and social preview", async () => {
   assert.equal((data.match(/"id":/g) ?? []).length, 133);
   assert.match(data, /patch: "\d+\.\d+\.\d+"/);
   assert.match(data, /snapshot: "\d{4}-\d{2}-\d{2}"/);
-  assert.match(data, /rank: "Mythic\+"/);
+  assert.match(data, /rank: "Mythic"/);
   assert.match(data, /timeframe: "近 7 日"/);
   for (const lane of ["Exp Lane", "Gold Lane", "Mid Lane", "Jungle", "Roam"]) {
     assert.match(page, new RegExp(lane));

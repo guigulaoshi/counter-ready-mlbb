@@ -13,9 +13,9 @@
 
 </div>
 
-> A fast, bilingual Mobile Legends: Bang Bang (国服《决胜巅峰》) draft assistant that scores counters against the enemy lineup and synergy with your own team, powered by a local Mythic+ statistics snapshot.
+> A fast, bilingual Mobile Legends: Bang Bang (国服《决胜巅峰》) draft assistant that scores counters against the enemy lineup and synergy with your own team, powered by a local Mythic statistics snapshot.
 
-一个快速、中英双语的《决胜巅峰》（Mobile Legends: Bang Bang）选英雄工具：同时计算对敌方的克制关系和与队友的配合关系，使用本地神话+统计快照。
+一个快速、中英双语的《决胜巅峰》（Mobile Legends: Bang Bang）选英雄工具：同时计算对敌方的克制关系和与队友的配合关系，使用本地神话统计快照。
 
 ## Screenshots / 截图
 
@@ -52,7 +52,7 @@ The site is static and works on desktop and phone browsers. No install, no accou
 
 - Select 1–5 enemy heroes and up to 4 locked-in teammates / 选择 1–5 名敌方英雄，以及最多 4 名已确定的队友
 - Filter recommendations by EXP, Gold, Mid, Jungle or Roam / 按五个分路筛选
-- Rank picks only by measured Mythic+ counter and synergy relationships; global win rate is ignored / 只按神话+实测的克制与配合关系排序，不考虑全局胜率
+- Rank picks only by measured Mythic counter and synergy relationships; global win rate is ignored / 只按神话实测的克制与配合关系排序，不考虑全局胜率
 - Automatically follows the browser language, with a manual 中文/EN switch / 根据浏览器语言自动选择中英文，也可手动切换
 - Responsive desktop and mobile layouts / 同时适配桌面和手机
 - No account, backend or user-tracking features / 无需账户、后端或用户追踪
@@ -75,17 +75,20 @@ Counter edges are signed: the reverse direction (the enemy countering your pick)
 ## Data / 数据
 
 - Patch 2.2.16 · Season 42
-- Snapshot / 快照：2026-09-29
+- Statistics source updated / 胜率源数据更新：2026-09-28 23:03:57 UTC
+- Retrieved / 本次抓取：2026-09-29 UTC
 - 133 heroes / 133 位英雄
-- 7,082 counter edges and 973 synergy pairs / 7,082 条克制关系和 973 对配合关系
-- Win, pick and ban rates are the 7-day average across Mythic and Mythical Honor / 胜率、选取率、禁用率为神话、神话荣耀近 7 日平均值
-- Counter edges come from the mlbb.tools JSON API; synergy edges are read from each hero's "Best With" block / 克制数据来自 mlbb.tools 的 JSON 接口，配合数据来自英雄页的 "Best With" 区块
-- Mythical Glory is excluded: its samples are thin enough that pair edges reach 40–65pp against a median of ~3pp / 已排除神话荣光：该段位样本过薄，对位数值能飙到 40–65pp，而中位数只有约 3pp
+- 1,682 fresh counter edges and 572 synergy pairs / 1,682 条通过时效检查的克制关系和 572 对配合关系
+- Win, pick and ban rates use **Mythic only, Past 7 days**, requested explicitly from [MLBB.io](https://mlbb.io/api/hero/filtered-statistics?rankId=4&timeframeId=3) (`rankId=4`, `timeframeId=3`). No averaging with other ranks / 胜率、选取率、禁用率固定为**仅神话段位、最近 7 天**，不与神话荣耀等段位混合。
+- Every returned statistic must match that scope and have a source timestamp within 48 hours; otherwise the refresh fails without replacing the snapshot. The displayed date is the source update date, not the retrieval date / 逐条检查段位、周期和源数据时间；数据超过 48 小时或口径不符就停止更新。页面日期展示来源更新时间，不再用抓取日期代替。
+- Counters come from mlbb.tools with `rank_tier=mythic`, `time_window=7d`, and a valid `updated_at` within seven days of retrieval. 3,957 stale, undated or wrong-scope records were excluded from this snapshot. Source record updates span September 22–28; this does not prove every record covers the same latest calendar week / 克制数据仅保留神话、七天统计窗口、且近七天更新的记录，本次排除 3,957 条不合要求的记录。保留记录的更新时间为 9 月 22–28 日，并不代表每条数据都覆盖同一个最新自然周。
+- Fresh counter coverage can be empty or incomplete; missing relations count as unknown (0), never as proof of no counter / 清理旧记录后，部分英雄的克制关系可能缺失；未收录关系按未知（0）处理，不表示不存在克制。
+- Synergy uses only the Mythic hero pages' "Best With" block. Its source publishes neither a statistics window nor update timestamps, so it **cannot be verified as current seven-day data**. The UI labels this limitation / 配合关系仅取神话英雄页的 "Best With" 区块；来源未公开统计周期和更新日期，**不能确认属于最新七天数据**，页面已明确提示。
 - Every edge is clipped at 15pp so one thin sample cannot dominate a recommendation / 所有数值上限截断在 15pp，避免单个小样本对位主导推荐结果
 
-This is a static snapshot and does not update automatically. Run `npm run data:update-matchups` and update the displayed patch metadata after a game patch. The script rewrites `app/matchups.generated.ts`, refreshes the win, pick and ban rates in `app/data.ts`, and syncs each hero's role, lane and specialty tags from the official Moonton hero list; it warns when any edge hits the clipping ceiling. mlbb.tools' own patch label can lag the live game, so set the patch in `DATA_META` from the official patch notes.
+This is a static snapshot and does not update automatically. Run `npm run data:update-matchups` and update the displayed patch metadata after a game patch. The script rewrites `app/matchups.generated.ts`, refreshes the explicitly scoped MLBB.io win, pick and ban rates in `app/data.ts`, and syncs each hero's role, lane and specialty tags from the official Moonton hero list; it warns when any edge hits the clipping ceiling. mlbb.tools' own patch label can lag the live game, so set the patch in `DATA_META` from the official patch notes.
 
-这是静态快照，不会自动更新。游戏换版本后，运行 `npm run data:update-matchups`，并同步更新页面版本信息。脚本会重写 `app/matchups.generated.ts`，刷新 `app/data.ts` 里的胜率、选取率和禁用率，并从官方英雄列表同步每位英雄的定位、分路和特长标签；mlbb.tools 自己标注的版本号可能落后于游戏实际版本，`DATA_META` 里的版本请以官方更新公告为准；有数值触及截断上限时会给出告警。
+这是静态快照，不会自动更新。游戏换版本后，运行 `npm run data:update-matchups`，并同步更新页面版本信息。脚本会重写 `app/matchups.generated.ts`，从 MLBB.io 刷新 `app/data.ts` 里明确指定神话、最近七天的胜率、选取率和禁用率，并从官方英雄列表同步每位英雄的定位、分路和特长标签；mlbb.tools 自己标注的版本号可能落后于游戏实际版本，`DATA_META` 里的版本请以官方更新公告为准；有数值触及截断上限时会给出告警。
 
 ## Local development / 本地运行
 

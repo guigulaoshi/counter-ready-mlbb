@@ -263,7 +263,8 @@ export default function Home() {
             <span>{DATA_META.season}</span>
             <b>PATCH {DATA_META.patch}</b>
             <b className="rank-meta">{DATA_META.rank}</b>
-            <span className="meta-date">{t.data} {DATA_META.snapshot}</span>
+            <span>{t.statsWindow}</span>
+            <span className="meta-date" title={DATA_META.sourceUpdatedAt}>{t.data} {DATA_META.snapshot}</span>
           </div>
           <div className="language-switch" aria-label="Language">
             <button type="button" className={locale === "zh" ? "active" : ""} onClick={() => changeLocale("zh")} aria-pressed={locale === "zh"}>中</button>
@@ -282,7 +283,7 @@ export default function Home() {
           <h2 className="hero-promise">{t.introLead}<em>{t.introAccent}</em></h2>
           <p>{t.introDescription}</p>
           <div className="hero-facts">
-            <span><b>MYTHIC+</b>{t.matchupOnly}</span>
+            <span><b>MYTHIC</b>{t.matchupOnly}</span>
             <span><b>5 + 4</b>{t.enemyFact}</span>
             <span><b>{DATA_META.patch}</b>{t.patchFact}</span>
           </div>
