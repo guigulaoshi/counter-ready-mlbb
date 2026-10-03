@@ -75,13 +75,13 @@ Counter edges are signed: the reverse direction (the enemy countering your pick)
 ## Data / 数据
 
 - Patch 2.2.16 · Season 42
-- Statistics source updated / 胜率源数据更新：2026-09-28 23:03:57 UTC
-- Retrieved / 本次抓取：2026-09-29 UTC
+- Statistics source updated / 胜率源数据更新：2026-10-03 01:04:06 UTC
+- Retrieved / 本次抓取：2026-10-03 UTC
 - 133 heroes / 133 位英雄
-- 1,682 fresh counter edges and 572 synergy pairs / 1,682 条通过时效检查的克制关系和 572 对配合关系
+- 1,282 fresh counter edges and 573 synergy pairs / 1,282 条通过时效检查的克制关系和 573 对配合关系
 - Win, pick and ban rates use **Mythic only, Past 7 days**, requested explicitly from [MLBB.io](https://mlbb.io/api/hero/filtered-statistics?rankId=4&timeframeId=3) (`rankId=4`, `timeframeId=3`). No averaging with other ranks / 胜率、选取率、禁用率固定为**仅神话段位、最近 7 天**，不与神话荣耀等段位混合。
 - Every returned statistic must match that scope and have a source timestamp within 48 hours; otherwise the refresh fails without replacing the snapshot. The displayed date is the source update date, not the retrieval date / 逐条检查段位、周期和源数据时间；数据超过 48 小时或口径不符就停止更新。页面日期展示来源更新时间，不再用抓取日期代替。
-- Counters come from mlbb.tools with `rank_tier=mythic`, `time_window=7d`, and a valid `updated_at` within seven days of retrieval. 3,957 stale, undated or wrong-scope records were excluded from this snapshot. Source record updates span September 22–28; this does not prove every record covers the same latest calendar week / 克制数据仅保留神话、七天统计窗口、且近七天更新的记录，本次排除 3,957 条不合要求的记录。保留记录的更新时间为 9 月 22–28 日，并不代表每条数据都覆盖同一个最新自然周。
+- Counters come from mlbb.tools with `rank_tier=mythic`, `time_window=7d`, and a valid `updated_at` within seven days of retrieval. 4,383 stale, undated or wrong-scope records were excluded from this snapshot. Source record updates span September 26–October 2; this does not prove every record covers the same latest calendar week / 克制数据仅保留神话、七天统计窗口、且近七天更新的记录，本次排除 4,383 条不合要求的记录。保留记录的更新时间为 9 月 26 日至 10 月 2 日，并不代表每条数据都覆盖同一个最新自然周。
 - Fresh counter coverage can be empty or incomplete; missing relations count as unknown (0), never as proof of no counter / 清理旧记录后，部分英雄的克制关系可能缺失；未收录关系按未知（0）处理，不表示不存在克制。
 - Synergy uses only the Mythic hero pages' "Best With" block. Its source publishes neither a statistics window nor update timestamps, so it **cannot be verified as current seven-day data**. The UI labels this limitation / 配合关系仅取神话英雄页的 "Best With" 区块；来源未公开统计周期和更新日期，**不能确认属于最新七天数据**，页面已明确提示。
 - Every edge is clipped at 15pp so one thin sample cannot dominate a recommendation / 所有数值上限截断在 15pp，避免单个小样本对位主导推荐结果
