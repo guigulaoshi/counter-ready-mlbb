@@ -15,7 +15,7 @@ export const DATA_META = {
   season: "S42",
   snapshot: "2026-10-03",
   sourceUpdatedAt: "2026-10-03T01:04:06.000Z",
-  fetchedAt: "2026-10-03T03:53:55.694Z",
+  fetchedAt: "2026-10-03T13:34:38.369Z",
   rank: "Mythic",
   rankLabel: "神话",
   rankId: 4,
