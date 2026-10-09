@@ -120,3 +120,7 @@ MIT 开源。本项目为非官方玩家工具，与 Moonton 无隶属或背书�
 ## Made by / 作者
 
 guigulaoshi · [itch.io](https://guigulaoshi.itch.io) · [GitHub](https://github.com/guigulaoshi) · [YouTube](https://www.youtube.com/@guigulaoshi) · [X](https://x.com/guigulaoshi) · [TikTok](https://www.tiktok.com/@guigulaoshi) · [抖音](https://www.douyin.com/user/MS4wLjABAAAAmWbEAlX8SvUu3RUFu48ArUSOqK9-2cTOC78Byiqe0GY) · [哔哩哔哩](https://space.bilibili.com/3546730639395688) · [小红书](https://www.xiaohongshu.com/user/profile/6090be480000000001005d88)
+
+Icon artwork attribution: [Third-party notices](THIRD_PARTY_NOTICES.md).
+
+图标素材来源及版权：[第三方声明](THIRD_PARTY_NOTICES.md)。
