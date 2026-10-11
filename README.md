@@ -2,43 +2,32 @@
 
 # Counter Ready · 决胜巅峰克制助手
 
-**Know the enemy lineup, pick the right hero.** A bilingual Mobile Legends: Bang Bang draft assistant that scores counters and teammate synergy together.<br>
-**看清敌我，选对英雄。** 中英双语的《决胜巅峰》选英雄工具，同时计算克制关系和队友配合。
+**Know the enemy lineup, pick the right hero.** A bilingual Mobile Legends: Bang Bang draft assistant with a compact, scrollable win-rate ranking.<br>
+**看清敌我，选对英雄。** 中英双语的《决胜巅峰》选英雄工具，紧凑展示胜率排名，左右滑动查看。
 
 <a href="https://guigulaoshi.github.io/counter-ready-mlbb/"><img src="https://img.shields.io/badge/%E2%96%B6%20Open%20in%20your%20browser-%E5%9C%A8%E7%BA%BF%E4%BD%BF%E7%94%A8-f5c542?style=for-the-badge" alt="Open in your browser · 在线使用" height="44"></a>
 
 **[▶ Play it now / 在线使用](https://guigulaoshi.github.io/counter-ready-mlbb/)** — runs in the browser, nothing to install / 打开网页即可使用，无需安装。
 
-<a href="https://guigulaoshi.github.io/counter-ready-mlbb/"><img src="docs/readme/hero.webp" alt="Counter Ready on desktop: three enemies and two teammates picked, Baxia ranked as the best jungle pick" width="100%"></a>
+<a href="https://guigulaoshi.github.io/counter-ready-mlbb/"><img src="docs/readme/compact-desktop.jpg" alt="Counter Ready: full selected portraits and a single horizontal win-rate ranking" width="100%"></a>
 
 </div>
 
-> A fast, bilingual Mobile Legends: Bang Bang (国服《决胜巅峰》) draft assistant that scores counters against the enemy lineup and synergy with your own team, powered by a local Mythic statistics snapshot.
+> A fast, bilingual Mobile Legends: Bang Bang (国服《决胜巅峰》) draft assistant with a horizontal win-rate ranking and measured matchup details, powered by a local Mythic statistics snapshot.
 
-一个快速、中英双语的《决胜巅峰》（Mobile Legends: Bang Bang）选英雄工具：同时计算对敌方的克制关系和与队友的配合关系，使用本地神话统计快照。
+一个快速、中英双语的《决胜巅峰》（Mobile Legends: Bang Bang）选英雄工具：按胜率展示一排英雄排名，并提供对敌方的克制关系和与队友的配合依据，使用本地神话统计快照。
 
 ## Screenshots / 截图
 
 <table>
   <tr>
-    <td width="33%"><img src="docs/readme/phone-home.webp" alt="Phone: home screen in Chinese"></td>
-    <td width="33%"><img src="docs/readme/phone-draft.webp" alt="Phone: picking the enemy lineup and your teammates"></td>
-    <td width="33%"><img src="docs/readme/phone-best-pick.webp" alt="Phone: best pick card with the reasons behind the score"></td>
+    <td width="50%"><img src="docs/readme/compact-phone-zh.jpg" alt="Chinese phone layout with complete portraits and win rates ranked from left to right"></td>
+    <td width="50%"><img src="docs/readme/compact-phone-en.jpg" alt="English phone layout with a horizontally scrollable win-rate ranking"></td>
   </tr>
-  <tr>
-    <td align="center">Phone, 中文 / 手机首页</td>
-    <td align="center">Enemy + ally picks / 选敌方和队友</td>
-    <td align="center">Best pick and why / 最佳选择和理由</td>
-  </tr>
-  <tr>
-    <td colspan="3"><img src="docs/readme/desktop-results-zh.webp" alt="Desktop in Chinese: hero grid, lane picker and the ranked alternatives" width="100%"></td>
-  </tr>
-  <tr>
-    <td colspan="3" align="center">Desktop, 中文: lane picker and ranked alternatives / 电脑版：分路选择与备选英雄排名</td>
-  </tr>
+  <tr><td align="center">Phone, 中文 / 手机中文版</td><td align="center">Phone, English / 手机英文版</td></tr>
 </table>
 
-<sub>Screenshots taken from the live site. / 截图均取自线上网页。</sub>
+<sub>Screenshots from this build in a browser; phone layouts use a 390×844 viewport. / 本版浏览器截图；手机布局按 390×844 尺寸模拟。</sub>
 
 ## Play / 在线使用
 
@@ -52,25 +41,21 @@ The site is static and works on desktop and phone browsers. No install, no accou
 
 - Select 1–5 enemy heroes and up to 4 locked-in teammates / 选择 1–5 名敌方英雄，以及最多 4 名已确定的队友
 - Filter recommendations by EXP, Gold, Mid, Jungle or Roam / 按五个分路筛选
-- Rank picks only by measured Mythic counter and synergy relationships; global win rate is ignored / 只按神话实测的克制与配合关系排序，不考虑全局胜率
+- One horizontally scrollable row, ranked by overall Mythic win rate from high to low / 一排可左右滑动的英雄，按神话整体胜率从高到低排序
+- Tap a ranked hero to inspect measured counter and synergy relationships / 点击排名里的英雄查看实测克制与配合依据
 - Automatically follows the browser language, with a manual 中文/EN switch / 根据浏览器语言自动选择中英文，也可手动切换
 - Responsive desktop and mobile layouts / 同时适配桌面和手机
 - No account, backend or user-tracking features / 无需账户、后端或用户追踪
 
-## Scoring / 计分方式
+## Ranking and matchup details / 排名与对位依据
 
-```
-score = mean(counter edge vs. each enemy) + mean(synergy edge with each teammate)
-分数 = 对每名敌方的克制值取平均 + 对每名队友的配合值取平均
-```
+The row shows each available hero's overall Mythic win rate over the snapshot's seven-day window, descending from left to right. Lane filters and locked-in enemy or ally picks determine which heroes are available. This is not a predicted win rate against the current lineup.
 
-Both terms are measured win-rate swings in percentage points, so they add directly. Means rather than sums keep the two terms weighted the same way no matter how many enemies or teammates are locked in so far.
+排名显示快照中神话段位七天窗口的英雄整体胜率，从左到右由高到低。按所选分路筛选，并排除敌我双方已锁定的英雄。这不是面对当前阵容的预测胜率。
 
-两项都是实测胜率增减的百分点，因此可以直接相加。取平均而非求和，是为了让两项的权重不随已选人数变化而漂移。
+Measured counter and synergy swings remain available in the hero details, separately in percentage points. They are not added or converted into a predicted win rate. Missing relationships do not imply a zero observed win rate.
 
-Counter edges are signed: the reverse direction (the enemy countering your pick) subtracts. Synergy edges are only ever positive, because the source publishes each hero's best partners and never its worst — an unlisted pair counts as 0, not as a penalty.
-
-克制值有正有负：被敌方反克制会扣分。配合值只有正值，因为数据源只公布每位英雄的头部搭档、不公布最差搭档——没有列出的组合按 0 处理，而不是扣分。
+实测克制与配合增减保留在英雄详情中，分别以百分点显示，不再加成综合分或换算成预测胜率。没有关系数据不代表实测胜率为零。
 
 ## Data / 数据
 

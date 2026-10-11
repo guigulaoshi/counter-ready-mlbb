@@ -19,20 +19,24 @@ test("renders the finished counter picker", async () => {
   const html = await response.text();
   assert.match(html, /<title>Mobile Legends Counter Picker/);
   assert.match(html, /Mobile Legends/);
-  assert.match(html, /Bang Bang/);
-  assert.match(html, /非官方 · 神话选人助手/);
+  assert.match(html, /BANG BANG/);
+
   assert.match(html, /PATCH[\s\S]{0,30}\d+\.\d+\.\d+/);
   assert.match(html, /敌方选了谁/);
   assert.match(html, /敌方阵容/);
-  assert.match(html, /先填敌方阵容/);
+
   assert.match(html, /你打哪条路/);
-  assert.match(html, /暂无同路实测关系数据/);
+  assert.match(html, /胜率排名/);
+  const rates = [...html.matchAll(/aria-label="[^"]*，胜率 ([0-9.]+)%"/g)].map((match) => Number(match[1]));
+  assert.ok(rates.length > 1);
+  assert.ok(rates.every((rate, index) => index === 0 || rates[index - 1] >= rate));
+  assert.doesNotMatch(html, /综合分|阵容推荐|备选英雄/);
   assert.match(html, /队友已经选了谁/);
   assert.match(html, /我方队友/);
   assert.match(html, /Mythic/);
   assert.match(html, /最近 7 天/);
   assert.match(html, /胜率更新/);
-  assert.match(html, /配合数据日期未公开/);
+  assert.match(html, /配合来源未公开统计周期和日期/);
   assert.doesNotMatch(html, /MYTHIC\+|Mythic\+|神话\+/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview|SkeletonPreview/);
 });
@@ -54,7 +58,6 @@ test("ships complete local hero data and social preview", async () => {
   }
   assert.match(page, /getMatchupEdge/);
   assert.match(page, /getSynergyEdge/);
-  assert.doesNotMatch(page, /candidate\.wr|overallWinRateDiff/);
   assert.match(page, /Array\.from\(\{ length: limit \}/);
   assert.match(page, /const MAX_ENEMIES = 5;/);
   assert.match(page, /const MAX_ALLIES = 4;/);
@@ -63,13 +66,6 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(page, /\["value"\]>\("Exp Lane"\)/);
   assert.match(page, /slice\(0, 28\)/);
   assert.match(page, /showAllHeroes/);
-  assert.match(page, /recommendations\.slice\(1, 10\)/);
-  assert.match(page, /const MAX_AVOID = 5;/);
-  assert.match(page, /hero\.threats\.length > 0 && hero\.score < 0/);
-  assert.match(page, /className="alternative-card avoid-card"/);
-  assert.match(i18n, /不建议选/);
-  assert.match(i18n, /Avoid these picks/);
-  assert.match(page, /padStart\(2, "0"\)/);
   assert.doesNotMatch(page, /HEROES\.find\(\(hero\) => hero\.name === "Hanabi"\)/);
   assert.doesNotMatch(page, /current\.length > 1/);
   assert.doesNotMatch(page, /熟练度/);
@@ -77,8 +73,6 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(page, /navigator\.language/);
   assert.match(i18n, /Who did the enemy pick\?/);
   assert.match(i18n, /敌方选了谁？/);
-  assert.match(i18n, /只按实测克制与配合关系排序，不参考全局胜率/);
-  assert.match(i18n, /Ranked only by measured counter and synergy relationships/);
   assert.match(i18n, /Who did your team lock in\?/);
   assert.match(staticHtml, /Counter Ready/);
   await access(new URL("../public/og-v2.png", import.meta.url));
