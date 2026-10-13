@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DATA_META, HEROES, type Hero } from "./data";
 import { COPY, ROLE_LABELS, type Locale } from "./i18n";
-import { getMatchupEdge, getSynergyEdge } from "./matchups";
-import { rankRecommendations } from "./recommendations";
+import { getMatchupEdge, getSynergyEdge, MATCHUP_META } from "./matchups";
+import { rankAvoids, rankRecommendations } from "./recommendations";
 
 const LANES = [
   { value: "Exp Lane", zh: "经验路", en: "EXP Lane", short: "EXP", icon: "⚔" },
@@ -62,6 +62,7 @@ export default function Home() {
   const [showAll, setShowAll] = useState(false);
   const [inspectedHero, setInspectedHero] = useState<string | null>(null);
   const rankingRef = useRef<HTMLDivElement>(null);
+  const avoidRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const t = COPY[locale];
   const roleLabels = ROLE_LABELS[locale];
@@ -125,10 +126,15 @@ export default function Home() {
     () => rankRecommendations(HEROES, enemies, allies, lane),
     [enemies, allies, lane],
   );
-  const inspected = rankedHeroes.find((hero) => hero.name === inspectedHero);
+  const avoidedHeroes = useMemo(
+    () => rankAvoids(HEROES, enemies, allies, lane),
+    [enemies, allies, lane],
+  );
+  const inspected = [...rankedHeroes, ...avoidedHeroes].find((hero) => hero.name === inspectedHero);
   const reasons = inspected ? matchupReasons(inspected, enemies, allies, locale) : [];
   useEffect(() => {
     rankingRef.current?.scrollTo({ left: 0 });
+    avoidRef.current?.scrollTo({ left: 0 });
   }, [enemies, allies, lane]);
   const changeLane = (nextLane: (typeof LANES)[number]["value"]) => {
     setLane(nextLane);
@@ -183,7 +189,7 @@ export default function Home() {
             <b>PATCH {DATA_META.patch}</b>
             <b className="rank-meta">{DATA_META.rank}</b>
             <span>{t.statsWindow}</span>
-            <span className="meta-date" title={DATA_META.sourceUpdatedAt}>{t.data} {DATA_META.snapshot}</span>
+            <span className="meta-date" title={DATA_META.fetchedAt}>{t.dataFetched} {DATA_META.fetchedAt.slice(0, 10)}</span>
           </div>
           <div className="language-switch" aria-label="Language">
             <button type="button" className={locale === "zh" ? "active" : ""} onClick={() => changeLocale("zh")} aria-pressed={locale === "zh"}>中</button>
@@ -275,6 +281,29 @@ export default function Home() {
             ))}
           </div>
           {rankedHeroes.length > 0 && <p className="ranking-hint">{t.swipeRanking}</p>}
+          <div className="ranking-heading avoid-heading">
+            <h2>{t.avoidTitle}</h2>
+            <span>{t.avoidScope}</span>
+          </div>
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+          <div className="winrate-ranking avoid-ranking" ref={avoidRef} tabIndex={0} role="region" aria-label={t.avoidTitle}>
+            {!avoidedHeroes.length && <div className="ranking-empty" role="status">
+              <strong>{enemies.length ? t.noAvoidTitle : t.startTitle}</strong>
+              <p>{enemies.length ? t.noAvoidHelp : t.startHelp}</p>
+            </div>}
+            {avoidedHeroes.map((hero, index) => (
+              <button type="button" className={`ranking-card avoid-card ${inspectedHero === hero.name ? "inspected" : ""}`} key={hero.id}
+                onClick={() => setInspectedHero(inspectedHero === hero.name ? null : hero.name)}
+                aria-expanded={inspectedHero === hero.name} aria-controls="hero-evidence"
+                aria-label={t.heroDraftScore(hero.name, hero.score)}>
+                <span className="ranking-position">{index + 1}</span>
+                <HeroPortrait hero={hero} />
+                <span className="ranking-name">{hero.name}</span>
+                <strong>{hero.score.toFixed(2)}<small>pp</small></strong>
+              </button>
+            ))}
+          </div>
+          {avoidedHeroes.length > 0 && <p className="ranking-hint">{t.avoidExplanation} · {t.avoidHint}</p>}
           <div id="hero-evidence" hidden={!inspected} className="hero-evidence">
             {inspected && <>
               <div className="evidence-heading"><h3>{inspected.name} · {t.evidence}</h3><button type="button" onClick={() => setInspectedHero(null)}>{t.closeEvidence}</button></div>
@@ -356,8 +385,12 @@ export default function Home() {
         </section>
 
         <section className="supporting-details" aria-label={t.dataDetails}>
-          <details className="data-details"><summary>{t.dataDetails} <span>PATCH {DATA_META.patch} · {DATA_META.snapshot}</span></summary>
+          {DATA_META.sourceDateStatus === "future" && <p className="source-warning" role="status">{t.sourceClockWarning}</p>}
+          <details className="data-details"><summary>{t.dataDetails} <span>PATCH {DATA_META.patch} · {DATA_META.fetchedAt.slice(0, 10)}</span></summary>
           <p className="formula-note">{t.rankingDefinition}</p>
+          <p className="formula-note">{t.dataFetched}: {DATA_META.fetchedAt} · {HEROES.length} {t.heroUnit}</p>
+          <p className="formula-note">{t.statsSourceTime}: {DATA_META.sourceUpdatedAt}</p>
+          <p className="formula-note">{t.counterSourceTime}: {MATCHUP_META.counterSourceOldest} – {MATCHUP_META.counterSourceNewest}</p>
 
           <p className="disclaimer">
             {t.rankingDisclaimer}

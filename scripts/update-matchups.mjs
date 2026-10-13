@@ -93,8 +93,11 @@ for (const change of metadataChanges) console.log(change);
 const heroStatistics = await withRetry("Mythic seven-day statistics", async () => {
   const response = await fetch(STATS_URL, { signal: AbortSignal.timeout(30_000) });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  return parseHeroStatistics(await response.json(), heroes);
+  return parseHeroStatistics(await response.json(), heroes, Date.now(), { reportClockSkew: true });
 });
+if (heroStatistics.sourceDateStatus !== "verified") {
+  console.warn(`Statistics source clock anomaly: ${heroStatistics.updatedAt}; importing scoped values with an explicit UI warning, not verified freshness.`);
+}
 
 function slugify(name) {
   return name
@@ -369,6 +372,8 @@ const nextData = dataSource
   .replace(/snapshot: "[^"]*"/, `snapshot: "${snapshot}"`)
   .replace(/sourceUpdatedAt: "[^"]*"/, `sourceUpdatedAt: "${heroStatistics.updatedAt}"`)
   .replace(/fetchedAt: "[^"]*"/, `fetchedAt: "${generatedAt}"`)
+  .replace(/ {2}sourceDateStatus: "[^"]*",\n/, "")
+  .replace(/ {2}sourceUpdatedAt:/, `  sourceDateStatus: "${heroStatistics.sourceDateStatus}",\n  sourceUpdatedAt:`)
   .replace(
     /export const HEROES: Hero\[\] = [\s\S]*;\n$/,
     `export const HEROES: Hero[] = ${JSON.stringify(heroes, null, 2)};\n`,

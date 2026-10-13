@@ -197,8 +197,13 @@ h1, h2, h3, p { margin: 0; }
 .ranking-card strong small { font-size: 12px; margin-left: 1px; }
 .ranking-card:hover, .ranking-card.inspected { border-color: var(--lime); background: #305475; }
 .ranking-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.avoid-heading { margin-top: 16px; }
+.avoid-heading h2, .avoid-card strong { color: var(--red); }
+.avoid-card { border-color: #8f5f72; background: linear-gradient(#483244, #292c43); }
+.avoid-card:hover, .avoid-card.inspected { border-color: var(--red); background: #563c50; }
 .ranking-empty { padding: 12px 4px; color: var(--muted); font-size: 12px; }
 .ranking-empty strong { display: block; margin-bottom: 4px; color: var(--text); font-size: 14px; }
+.source-warning { padding: 10px 12px; margin-bottom: 8px; border: 1px solid #8f5f72; border-radius: 4px; color: var(--red); font-size: 12px; line-height: 1.5; }
 .hero-evidence { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
 .hero-evidence[hidden] { display: none; }
 .evidence-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }

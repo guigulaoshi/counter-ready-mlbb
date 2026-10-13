@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
+import { DATA_META } from "../app/data.ts";
 
 async function render() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -26,7 +27,8 @@ test("renders the finished counter picker", async () => {
   assert.match(html, /敌方阵容/);
 
   assert.match(html, /你打哪条路/);
-  assert.match(html, /阵容推荐/);
+  assert.match(html, /建议选/);
+  assert.match(html, /尽量避免/);
   assert.match(html, /先选敌方英雄/);
   assert.match(html, /综合分 = 对敌方的平均克制值/);
   assert.doesNotMatch(html, /胜率排名|class="ranking-card/);
@@ -34,7 +36,8 @@ test("renders the finished counter picker", async () => {
   assert.match(html, /我方队友/);
   assert.match(html, /Mythic/);
   assert.match(html, /最近 7 天/);
-  assert.match(html, /胜率更新/);
+  assert.match(html, /数据抓取/);
+  if (DATA_META.sourceDateStatus === "future") assert.match(html, /胜率来源时间异常/);
   assert.match(html, /配合来源未公开统计周期和日期/);
   assert.doesNotMatch(html, /MYTHIC\+|Mythic\+|神话\+/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview|SkeletonPreview/);
@@ -56,6 +59,7 @@ test("ships complete local hero data and social preview", async () => {
     assert.match(page, new RegExp(lane));
   }
   assert.match(page, /rankRecommendations\(HEROES, enemies, allies, lane\)/);
+  assert.match(page, /rankAvoids\(HEROES, enemies, allies, lane\)/);
   assert.match(page, /getMatchupEdge/);
   assert.match(page, /getSynergyEdge/);
   assert.match(page, /Array\.from\(\{ length: limit \}/);

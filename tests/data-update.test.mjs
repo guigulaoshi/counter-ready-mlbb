@@ -48,6 +48,25 @@ test("rejects incomplete and invalid statistics instead of retaining old values"
   assert.throws(() => parseHeroStatistics(invalid, heroes, now), /Invalid win_rate/);
 });
 
+test("source-clock anomalies require explicit disclosure and never count as verified freshness", () => {
+  const payload = fixture();
+  payload.data.lastUpdated = "2026-09-29T05:00:00Z";
+  payload.data.heroes[0].created_at = payload.data.lastUpdated;
+  assert.throws(() => parseHeroStatistics(payload, heroes, now), /source date/);
+  const result = parseHeroStatistics(payload, heroes, now, { reportClockSkew: true });
+  assert.equal(result.sourceDateStatus, "future");
+  assert.equal(result.updatedAt, payload.data.lastUpdated);
+  assert.equal(result.stats.get("Masha").wr, 58.35);
+  assert.equal(parseHeroStatistics(fixture(), heroes, now).sourceDateStatus, "verified");
+  for (const date of ["2026-10-29T05:00:00Z", "2026-09-01T05:00:00Z", null]) {
+    payload.data.lastUpdated = date;
+    assert.throws(() => parseHeroStatistics(payload, heroes, now, { reportClockSkew: true }), /source date/);
+  }
+  payload.data.lastUpdated = "2026-09-29T05:00:00Z";
+  payload.data.heroes[0].rank_name = "ALL";
+  assert.throws(() => parseHeroStatistics(payload, heroes, now, { reportClockSkew: true }), /Wrong statistics scope/);
+});
+
 test("seven-day counter labels cannot bypass rank and source-age checks", () => {
   const row = { rank_tier: "mythic", time_window: "7d", updated_at: "2026-09-28T00:00:00Z" };
   assert.equal(isFreshCounter(row, now), true);

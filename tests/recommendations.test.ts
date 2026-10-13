@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { HEROES, type Hero } from "../app/data.ts";
-import { rankRecommendations } from "../app/recommendations.ts";
+import { rankAvoids, rankRecommendations } from "../app/recommendations.ts";
 import { getMatchupEdge } from "../app/matchups.ts";
 
 const hero = (name: string, wr = 50, lane = "Exp Lane"): Hero => ({
@@ -60,6 +60,33 @@ test("no picks or no positive evidence produces no win-rate fallback", () => {
 test("ties never use global win rate", () => {
   const ties = { counter: () => 2, synergy: () => 0 };
   assert.deepEqual(rankRecommendations([b, a], [enemy], [], "Exp Lane", ties).map(h => h.name), ["A", "B"]);
+});
+
+test("avoid list contains negative, countered picks with the worst score first", () => {
+  const edges = { counter: (name: string) => name === "A" ? -3 : -7, synergy: () => 0 };
+  const avoided = rankAvoids([a, b], [enemy], [], "Exp Lane", edges);
+  assert.deepEqual(avoided.map(h => h.name), ["B", "A"]);
+  assert.deepEqual(avoided.map(h => h.score), [-7, -3]);
+  assert.ok(avoided.every(h => h.threats === 1));
+  assert.deepEqual(rankRecommendations([a, b], [enemy], [], "Exp Lane", edges), []);
+});
+
+test("avoid list respects lineup, lane and missing evidence", () => {
+  assert.deepEqual(rankAvoids([a, b], [other], [], "Exp Lane", relationships).map(h => h.name), ["A"]);
+  assert.deepEqual(rankAvoids([a, b], [enemy], [], "Exp Lane", relationships), []);
+  assert.deepEqual(rankAvoids([a, b], [], [], "Exp Lane", relationships), []);
+  assert.deepEqual(rankAvoids([a, b], [hero("Unknown")], [], "Exp Lane", relationships), []);
+  assert.deepEqual(rankAvoids([a, b], [other, a], [], "Exp Lane", relationships), []);
+  assert.deepEqual(rankAvoids([a, b], [other], [a], "Exp Lane", relationships), []);
+  assert.deepEqual(rankAvoids([a, b], [other], [], "Mid Lane", relationships), []);
+});
+
+test("ally synergy can offset a counter penalty without contradictory recommendation lists", () => {
+  const edges = { counter: () => -3, synergy: () => 5 };
+  assert.equal(rankAvoids([a], [enemy], [], "Exp Lane", edges).length, 1);
+  assert.deepEqual(rankAvoids([a], [enemy], [ally], "Exp Lane", edges), []);
+  assert.equal(rankRecommendations([a], [enemy], [ally], "Exp Lane", edges)[0].score, 2);
+  assert.deepEqual(rankAvoids([a], [enemy], [ally], "Exp Lane", { counter: () => -3, synergy: () => 3 }), []);
 });
 
 test("real snapshot rankings use the selected enemy's signed matchup relationships", () => {

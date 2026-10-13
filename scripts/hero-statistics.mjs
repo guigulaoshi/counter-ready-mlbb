@@ -3,15 +3,24 @@ export const MAX_SOURCE_AGE_MS = 48 * 60 * 60 * 1000;
 
 // MLBB.io's public rank selector maps 4 to Mythic and timeframe 3 to Past 7 days.
 // Validate the response too: an ignored query must not silently import ALL / 1 day.
-export function parseHeroStatistics(payload, heroes, now = Date.now()) {
+export function parseHeroStatistics(payload, heroes, now = Date.now(), { reportClockSkew = false } = {}) {
   if (payload.success !== true || !Array.isArray(payload.data?.heroes)) {
     throw new Error("Missing Mythic seven-day hero statistics");
   }
   const updatedAt = payload.data.lastUpdated;
+  let sourceDateStatus = "verified";
   const validateDate = (value) => {
     const timestamp = Date.parse(value);
-    if (!Number.isFinite(timestamp) || timestamp > now || now - timestamp > MAX_SOURCE_AGE_MS) {
+    if (!Number.isFinite(timestamp) || now - timestamp > MAX_SOURCE_AGE_MS) {
       throw new Error(`Missing or stale statistics source date: ${value}`);
+    }
+    if (timestamp > now) {
+      // A small source-clock anomaly can be imported only with explicit disclosure.
+      // It is never marked as verified fresh, and implausible future dates still fail.
+      if (!reportClockSkew || timestamp - now > 24 * 60 * 60 * 1000) {
+        throw new Error(`Future statistics source date: ${value}`);
+      }
+      sourceDateStatus = "future";
     }
   };
   validateDate(updatedAt);
@@ -34,5 +43,5 @@ export function parseHeroStatistics(payload, heroes, now = Date.now()) {
     if (!row || row.hero_name !== hero.name) throw new Error(`Missing or mismatched statistics for ${hero.name}`);
     return [hero.name, { wr: row.win_rate, pr: row.pick_rate, br: row.ban_rate }];
   }));
-  return { stats, updatedAt };
+  return { stats, updatedAt, sourceDateStatus };
 }
