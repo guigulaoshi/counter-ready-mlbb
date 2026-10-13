@@ -197,6 +197,8 @@ h1, h2, h3, p { margin: 0; }
 .ranking-card strong small { font-size: 12px; margin-left: 1px; }
 .ranking-card:hover, .ranking-card.inspected { border-color: var(--lime); background: #305475; }
 .ranking-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.ranking-empty { padding: 12px 4px; color: var(--muted); font-size: 12px; }
+.ranking-empty strong { display: block; margin-bottom: 4px; color: var(--text); font-size: 14px; }
 .hero-evidence { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
 .hero-evidence[hidden] { display: none; }
 .evidence-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }

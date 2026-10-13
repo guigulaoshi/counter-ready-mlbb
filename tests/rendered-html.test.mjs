@@ -26,11 +26,10 @@ test("renders the finished counter picker", async () => {
   assert.match(html, /敌方阵容/);
 
   assert.match(html, /你打哪条路/);
-  assert.match(html, /胜率排名/);
-  const rates = [...html.matchAll(/aria-label="[^"]*，胜率 ([0-9.]+)%"/g)].map((match) => Number(match[1]));
-  assert.ok(rates.length > 1);
-  assert.ok(rates.every((rate, index) => index === 0 || rates[index - 1] >= rate));
-  assert.doesNotMatch(html, /综合分|阵容推荐|备选英雄/);
+  assert.match(html, /阵容推荐/);
+  assert.match(html, /先选敌方英雄/);
+  assert.match(html, /综合分 = 对敌方的平均克制值/);
+  assert.doesNotMatch(html, /胜率排名|class="ranking-card/);
   assert.match(html, /队友已经选了谁/);
   assert.match(html, /我方队友/);
   assert.match(html, /Mythic/);
@@ -56,6 +55,7 @@ test("ships complete local hero data and social preview", async () => {
   for (const lane of ["Exp Lane", "Gold Lane", "Mid Lane", "Jungle", "Roam"]) {
     assert.match(page, new RegExp(lane));
   }
+  assert.match(page, /rankRecommendations\(HEROES, enemies, allies, lane\)/);
   assert.match(page, /getMatchupEdge/);
   assert.match(page, /getSynergyEdge/);
   assert.match(page, /Array\.from\(\{ length: limit \}/);

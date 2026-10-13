@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { DATA_META, HEROES, type Hero } from "./data";
 import { COPY, ROLE_LABELS, type Locale } from "./i18n";
 import { getMatchupEdge, getSynergyEdge } from "./matchups";
+import { rankRecommendations } from "./recommendations";
 
 const LANES = [
   { value: "Exp Lane", zh: "经验路", en: "EXP Lane", short: "EXP", icon: "⚔" },
@@ -121,15 +122,14 @@ export default function Home() {
   const visibleHeroes = query || showAll ? heroList : heroList.slice(0, 28);
 
   const rankedHeroes = useMemo(
-    () => HEROES.filter((hero) => !enemies.some((enemy) => enemy.name === hero.name))
-      .filter((hero) => !allies.some((ally) => ally.name === hero.name))
-      .filter((hero) => hero.lane.includes(lane))
-      .filter((hero) => Number.isFinite(hero.wr) && hero.wr >= 0 && hero.wr <= 100)
-      .sort((a, b) => b.wr - a.wr || a.name.localeCompare(b.name)),
+    () => rankRecommendations(HEROES, enemies, allies, lane),
     [enemies, allies, lane],
   );
   const inspected = rankedHeroes.find((hero) => hero.name === inspectedHero);
   const reasons = inspected ? matchupReasons(inspected, enemies, allies, locale) : [];
+  useEffect(() => {
+    rankingRef.current?.scrollTo({ left: 0 });
+  }, [enemies, allies, lane]);
   const changeLane = (nextLane: (typeof LANES)[number]["value"]) => {
     setLane(nextLane);
     setInspectedHero(null);
@@ -252,29 +252,34 @@ export default function Home() {
             </div>
           </div>
           <div className="ranking-heading">
-            <h2 id="result-heading">{t.winRateRanking}</h2>
+            <h2 id="result-heading">{t.recommendationRanking}</h2>
             <span>{t.rankScope}</span>
           </div>
           {/* Keyboard focus lets the horizontal ranking scroll without a pointer. */}
           {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-          <div className="winrate-ranking" ref={rankingRef} tabIndex={0} role="region" aria-label={t.winRateRanking}>
+          <div className="winrate-ranking" ref={rankingRef} tabIndex={0} role="region" aria-label={t.recommendationRanking}>
+            {!rankedHeroes.length && <div className="ranking-empty" role="status">
+              <strong>{enemies.length || allies.length ? t.noCounterTitle : t.startTitle}</strong>
+              <p>{enemies.length || allies.length ? t.noCounterHelp : t.startHelp}</p>
+            </div>}
             {rankedHeroes.map((hero, index) => (
               <button type="button" className={`ranking-card ${inspectedHero === hero.name ? "inspected" : ""}`} key={hero.id}
                 onClick={() => setInspectedHero(inspectedHero === hero.name ? null : hero.name)}
                 aria-expanded={inspectedHero === hero.name} aria-controls="hero-evidence"
-                aria-label={t.heroWinRate(hero.name, hero.wr)}>
+                aria-label={t.heroDraftScore(hero.name, hero.score)}>
                 <span className="ranking-position">{index + 1}</span>
                 <HeroPortrait hero={hero} />
                 <span className="ranking-name">{hero.name}</span>
-                <strong>{hero.wr.toFixed(2)}<small>%</small></strong>
+                <strong>+{hero.score.toFixed(2)}<small>pp</small></strong>
               </button>
             ))}
           </div>
-          <p className="ranking-hint">{t.swipeRanking}</p>
+          {rankedHeroes.length > 0 && <p className="ranking-hint">{t.swipeRanking}</p>}
           <div id="hero-evidence" hidden={!inspected} className="hero-evidence">
             {inspected && <>
               <div className="evidence-heading"><h3>{inspected.name} · {t.evidence}</h3><button type="button" onClick={() => setInspectedHero(null)}>{t.closeEvidence}</button></div>
-              <p>{t.winRateDefinition}</p>
+              <p>{t.counterEdge} {inspected.counterScore.toFixed(2)}pp · {t.synergyEdge} {inspected.synergyScore.toFixed(2)}pp</p>
+              <p>{t.rankingDefinition}</p>
               {reasons.length ? <ul className="reason-list">{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul> : <p>{t.noPairEvidence}</p>}
             </>}
           </div>
@@ -352,7 +357,7 @@ export default function Home() {
 
         <section className="supporting-details" aria-label={t.dataDetails}>
           <details className="data-details"><summary>{t.dataDetails} <span>PATCH {DATA_META.patch} · {DATA_META.snapshot}</span></summary>
-          <p className="formula-note">{t.winRateDefinition}</p>
+          <p className="formula-note">{t.rankingDefinition}</p>
 
           <p className="disclaimer">
             {t.rankingDisclaimer}

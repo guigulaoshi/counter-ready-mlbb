@@ -2,8 +2,8 @@
 
 # Counter Ready · 决胜巅峰克制助手
 
-**Know the enemy lineup, pick the right hero.** A bilingual Mobile Legends: Bang Bang draft assistant with a compact, scrollable win-rate ranking.<br>
-**看清敌我，选对英雄。** 中英双语的《决胜巅峰》选英雄工具，紧凑展示胜率排名，左右滑动查看。
+**Know the enemy lineup, pick the right hero.** A bilingual Mobile Legends: Bang Bang draft assistant with a compact, scrollable matchup-based ranking.<br>
+**看清敌我，选对英雄。** 中英双语的《决胜巅峰》选英雄工具，根据敌我阵容推荐英雄，左右滑动查看。
 
 <a href="https://guigulaoshi.github.io/counter-ready-mlbb/"><img src="https://img.shields.io/badge/%E2%96%B6%20Open%20in%20your%20browser-%E5%9C%A8%E7%BA%BF%E4%BD%BF%E7%94%A8-f5c542?style=for-the-badge" alt="Open in your browser · 在线使用" height="44"></a>
 
@@ -13,9 +13,9 @@
 
 </div>
 
-> A fast, bilingual Mobile Legends: Bang Bang (国服《决胜巅峰》) draft assistant with a horizontal win-rate ranking and measured matchup details, powered by a local Mythic statistics snapshot.
+> A fast, bilingual Mobile Legends: Bang Bang (国服《决胜巅峰》) draft assistant with a horizontal matchup-based ranking and measured matchup details, powered by a local Mythic statistics snapshot.
 
-一个快速、中英双语的《决胜巅峰》（Mobile Legends: Bang Bang）选英雄工具：按胜率展示一排英雄排名，并提供对敌方的克制关系和与队友的配合依据，使用本地神话统计快照。
+一个快速、中英双语的《决胜巅峰》（Mobile Legends: Bang Bang）选英雄工具：按敌方克制与队友配合综合分展示一排英雄推荐，并提供对应的实测依据，使用本地神话统计快照。
 
 ## Screenshots / 截图
 
@@ -27,7 +27,7 @@
   <tr><td align="center">Phone, 中文 / 手机中文版</td><td align="center">Phone, English / 手机英文版</td></tr>
 </table>
 
-<sub>Screenshots from this build in a browser; phone layouts use a 390×844 viewport. / 本版浏览器截图；手机布局按 390×844 尺寸模拟。</sub>
+<sub>Layout reference from the earlier win-rate build; the current ranking uses matchup scores. Phone viewport: 390×844. / 截图为此前胜率版的布局参考；当前排名已恢复为克制与配合综合分。手机尺寸：390×844。</sub>
 
 ## Play / 在线使用
 
@@ -41,7 +41,7 @@ The site is static and works on desktop and phone browsers. No install, no accou
 
 - Select 1–5 enemy heroes and up to 4 locked-in teammates / 选择 1–5 名敌方英雄，以及最多 4 名已确定的队友
 - Filter recommendations by EXP, Gold, Mid, Jungle or Roam / 按五个分路筛选
-- One horizontally scrollable row, ranked by overall Mythic win rate from high to low / 一排可左右滑动的英雄，按神话整体胜率从高到低排序
+- One horizontally scrollable row, ranked by counter and synergy score from high to low / 一排可左右滑动的英雄，按克制与配合综合分从高到低排序
 - Tap a ranked hero to inspect measured counter and synergy relationships / 点击排名里的英雄查看实测克制与配合依据
 - Automatically follows the browser language, with a manual 中文/EN switch / 根据浏览器语言自动选择中英文，也可手动切换
 - Responsive desktop and mobile layouts / 同时适配桌面和手机
@@ -49,13 +49,13 @@ The site is static and works on desktop and phone browsers. No install, no accou
 
 ## Ranking and matchup details / 排名与对位依据
 
-The row shows each available hero's overall Mythic win rate over the snapshot's seven-day window, descending from left to right. Lane filters and locked-in enemy or ally picks determine which heroes are available. This is not a predicted win rate against the current lineup.
+Recommendations recalculate whenever enemies, allies or lane change. Score = mean signed counter edge across all selected enemies + mean synergy edge across all selected allies. Reverse counters subtract from the score; missing relationships count as unknown (0). Global win, pick and ban rates never affect ranking, even as a tie-breaker. Equal scores use counter coverage, then name.
 
-排名显示快照中神话段位七天窗口的英雄整体胜率，从左到右由高到低。按所选分路筛选，并排除敌我双方已锁定的英雄。这不是面对当前阵容的预测胜率。
+敌方、队友或位置改变时，推荐即时重算。综合分 = 对全部已选敌方的平均克制值 + 与全部已选队友的平均配合值。被敌方克制会扣分，未知关系按 0 处理。全局胜率、选取率和禁用率均不参与排序；同分时依次比较克制覆盖人数、英雄名。
 
-Measured counter and synergy swings remain available in the hero details, separately in percentage points. They are not added or converted into a predicted win rate. Missing relationships do not imply a zero observed win rate.
+Only available lane picks with a positive score are recommended. With no picks or no positive evidence, the row shows a prompt instead of falling back to popular or high-win-rate heroes. Tap a hero for the score breakdown and measured relationships. Scores are percentage-point indicators, not predicted match win rates.
 
-实测克制与配合增减保留在英雄详情中，分别以百分点显示，不再加成综合分或换算成预测胜率。没有关系数据不代表实测胜率为零。
+只推荐当前分路、尚未被选走且综合分为正的英雄。未选阵容或没有正分依据时显示提示，不用高胜率英雄补位。点击英雄可查看分数构成及克制、配合依据。分数单位为百分点（pp），不是本局预测胜率。
 
 ## Data / 数据
 
