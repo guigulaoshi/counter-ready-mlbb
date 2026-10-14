@@ -90,8 +90,6 @@ h1, h2, h3, p { margin: 0; }
 .hero-tile.selected .portrait { opacity: .65; }
 .pick-order { position: absolute; right: 3px; top: 3px; min-width: 16px; line-height: 17px; font-size: 10px; font-style: normal; color: #fff; background: #964757; border-radius: 2px; }
 .pick-ally { background: #3577a4; }
-.show-all { min-height: 40px; margin-top: 8px; background: #193650; border: 1px solid var(--line); border-radius: 4px; font-size: 12px; }
-.show-all > span { margin-left: 8px; }
 .empty-search { padding: 14px 0; color: var(--muted); font-size: 13px; }
 .supporting-details { grid-column: 1 / -1; color: var(--muted); }
 .supporting-details .data-details { margin-top: 0; }

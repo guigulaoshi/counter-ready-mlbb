@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
-import { DATA_META } from "../app/data.ts";
+import { DATA_META, HEROES } from "../app/data.ts";
 
 async function render() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -24,6 +24,8 @@ test("renders the finished counter picker", async () => {
 
   assert.match(html, /PATCH[\s\S]{0,30}\d+\.\d+\.\d+/);
   assert.match(html, /敌方选了谁/);
+  assert.equal((html.match(/class="hero-tile /g) ?? []).length, HEROES.length);
+  assert.doesNotMatch(html, /class="show-all"/);
   assert.match(html, /敌方阵容/);
 
   assert.match(html, /你打哪条路/);
@@ -68,8 +70,6 @@ test("ships complete local hero data and social preview", async () => {
   assert.match(page, /const \[enemies, setEnemies\] = useState<Hero\[\]>\(\[\]\)/);
   assert.match(page, /const \[allies, setAllies\] = useState<Hero\[\]>\(\[\]\)/);
   assert.match(page, /\["value"\]>\("Exp Lane"\)/);
-  assert.match(page, /slice\(0, 28\)/);
-  assert.match(page, /showAllHeroes/);
   assert.doesNotMatch(page, /HEROES\.find\(\(hero\) => hero\.name === "Hanabi"\)/);
   assert.doesNotMatch(page, /current\.length > 1/);
   assert.doesNotMatch(page, /熟练度/);

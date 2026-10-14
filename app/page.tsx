@@ -59,7 +59,6 @@ export default function Home() {
   const [lane, setLane] = useState<(typeof LANES)[number]["value"]>("Exp Lane");
   const [query, setQuery] = useState("");
   const [role, setRole] = useState("All");
-  const [showAll, setShowAll] = useState(false);
   const [inspectedHero, setInspectedHero] = useState<string | null>(null);
   const rankingRef = useRef<HTMLDivElement>(null);
   const avoidRef = useRef<HTMLDivElement>(null);
@@ -119,8 +118,6 @@ export default function Home() {
       .filter((hero) => !cleanQuery || normalize(hero.name).includes(cleanQuery) || hero.name.split(/\s|-/).map((part) => part[0]).join("").toLowerCase().includes(cleanQuery))
       .sort((a, b) => b.pr - a.pr);
   }, [query, role]);
-
-  const visibleHeroes = query || showAll ? heroList : heroList.slice(0, 28);
 
   const rankedHeroes = useMemo(
     () => rankRecommendations(HEROES, enemies, allies, lane),
@@ -352,9 +349,9 @@ export default function Home() {
             ))}
           </div>
 
-          {!visibleHeroes.length && <p className="empty-search" role="status">{t.noSearchResults}</p>}
+          {!heroList.length && <p className="empty-search" role="status">{t.noSearchResults}</p>}
           <div className="hero-grid" aria-live="polite">
-            {visibleHeroes.map((hero) => {
+            {heroList.map((hero) => {
               const enemyIndex = enemies.findIndex((enemy) => enemy.name === hero.name);
               const allyIndex = allies.findIndex((ally) => ally.name === hero.name);
               const pickIndex = enemyIndex >= 0 ? enemyIndex : allyIndex;
@@ -374,13 +371,6 @@ export default function Home() {
               );
             })}
           </div>
-
-          {!query && heroList.length > 28 && (
-            <button className="show-all" type="button" onClick={() => setShowAll((value) => !value)}>
-              {showAll ? t.collapseHeroes : t.showAllHeroes(heroList.length)}
-              <span>{showAll ? "↑" : "↓"}</span>
-            </button>
-          )}
 
         </section>
 
